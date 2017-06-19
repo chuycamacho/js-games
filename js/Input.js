@@ -3,10 +3,10 @@ const KEY_UP_ARROW = 38;
 const KEY_RIGHT_ARROW = 39;
 const KEY_DOWN_ARROW = 40;
 
-let keyHeld_Gas = false;
-let keyHeld_Reverse = false;
-let keyHeld_TurnLeft = false;
-let keyHeld_TurnRight = false;
+const KEY_W = 87;
+const KEY_D = 68;
+const KEY_S = 83;
+const KEY_A = 65;
 
 let mouseX;
 let mouseY;
@@ -15,31 +15,32 @@ function setupInput() {
     canvas.addEventListener('mousedown', restartGame);
     document.addEventListener('keydown', keyPressed);
     document.addEventListener('keyup', keyReleased);
+
+    blueCar.setupInput(KEY_UP_ARROW, KEY_RIGHT_ARROW, KEY_DOWN_ARROW, KEY_LEFT_ARROW);
+    greenCar.setupInput(KEY_W, KEY_D, KEY_S, KEY_A);
+}
+
+function setKeyHeldFlag(car, value, event) {
+    if (event.keyCode == car.controlKeyLeft) {
+        car.keyHeld_TurnLeft = value;
+    } else if (event.keyCode == car.controlKeyRight) {
+        car.keyHeld_TurnRight = value;
+    } else if (event.keyCode == car.controlKeyUp) {
+        car.keyHeld_Gas = value;
+    } else if (event.keyCode == car.controlKeyDown) {
+        car.keyHeld_Reverse = value;
+    }
 }
 
 function keyPressed(event) {
-    if (event.keyCode == KEY_LEFT_ARROW) {
-        keyHeld_TurnLeft = true;
-    } else if (event.keyCode == KEY_RIGHT_ARROW) {
-        keyHeld_TurnRight = true;
-    } else if (event.keyCode == KEY_UP_ARROW) {
-        keyHeld_Gas = true;
-    } else if (event.keyCode == KEY_DOWN_ARROW) {
-        keyHeld_Reverse = true;
-    }
+    setKeyHeldFlag(blueCar, true, event);
+    setKeyHeldFlag(greenCar, true, event);
     event.preventDefault();
 }
 
 function keyReleased(event) {
-    if (event.keyCode == KEY_LEFT_ARROW) {
-        keyHeld_TurnLeft = false;
-    } else if (event.keyCode == KEY_RIGHT_ARROW) {
-        keyHeld_TurnRight = false;
-    } else if (event.keyCode == KEY_UP_ARROW) {
-        keyHeld_Gas = false;
-    } else if (event.keyCode == KEY_DOWN_ARROW) {
-        keyHeld_Reverse = false;
-    }
+    setKeyHeldFlag(blueCar, false, event);
+    setKeyHeldFlag(greenCar, false, event);
     event.preventDefault();
 }
 
@@ -48,11 +49,6 @@ function calculateMousePosition(event) {
     let root = document.documentElement;
     mouseX = event.clientX - rect.left - root.scrollLeft;
     mouseY = event.clientY - rect.top - root.scrollTop;
-
-    // carOnePositionX = mouseX;
-    // carOnePositionY = mouseY;
-    // carOneSpeed = 3;
-    // carOneSpeedY = -4;
 
     return {
         x: mouseX,

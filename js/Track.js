@@ -43,11 +43,11 @@ function drawTracks() {
     }
 }
 
-function isObstacleAtColRow(row, col) {
+function tileTypeAtColRow(row, col) {
     if (col >= 0 && col < TRACK_COLS && row >= 0 && row < TRACK_ROWS) {
-        return trackGrid[row][col] != TRACK_ROAD;
+        return trackGrid[row][col];
     } else {
-        return false;
+        return TRACK_WALL;
     }
 }
 
@@ -55,7 +55,10 @@ function carTrackHandling(carInstance) {
     let carPositionCol = Math.floor(carInstance.positionX / TRACK_WIDTH);
     let carPositionRow = Math.floor(carInstance.positionY / TRACK_HEIGHT);
     if (carPositionCol >= 0 && carPositionCol < TRACK_COLS && carPositionRow >= 0 && carPositionRow < TRACK_ROWS) {
-        if (isObstacleAtColRow(carPositionRow, carPositionCol)) {
+        let tileTypeHitted = tileTypeAtColRow(carPositionRow, carPositionCol);
+        if (tileTypeHitted == TRACK_GOAL) {
+            
+        } else if (tileTypeHitted != TRACK_ROAD) {
             //avoid the car to get stuck into the wall:
             carInstance.positionX -= Math.cos(carInstance.ang) * carInstance.speed;
             carInstance.positionY -= Math.sin(carInstance.ang) * carInstance.speed;

@@ -17,8 +17,8 @@ function startGame() {
     setInterval(updateEnvironment, 1000 / framesPerSecond);
     
     setupInput();
-    greenCar.reset(carTwoPic);
-    blueCar.reset(carOnePic);
+    greenCar.start(carTwoPic, "GreenMachine");
+    blueCar.start(carOnePic, "BlueStorm");
 }
 
 function setLoadingScreen() {
