@@ -4,7 +4,7 @@ const TRACK_GAP = 2;
 const TRACK_COLS = 20;
 const TRACK_ROWS = 15;
 
-let trackGrid = [
+let circuitOneGrid = [
     [4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4],
     [4, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
     [4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -21,6 +21,8 @@ let trackGrid = [
     [0, 2, 0, 0, 0, 0, 1, 4, 4, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 4, 4, 4, 4, 4, 4, 1, 1, 1, 1, 1, 1, 4],
 ];
+let trackGrid = [];
+
 const TRACK_ROAD = 0;
 const TRACK_WALL = 1;
 const TRACK_GOAL = 2;
@@ -57,7 +59,7 @@ function carTrackHandling(carInstance) {
     if (carPositionCol >= 0 && carPositionCol < TRACK_COLS && carPositionRow >= 0 && carPositionRow < TRACK_ROWS) {
         let tileTypeHitted = tileTypeAtColRow(carPositionRow, carPositionCol);
         if (tileTypeHitted == TRACK_GOAL) {
-            
+            loadCircuit(circuitOneGrid);
         } else if (tileTypeHitted != TRACK_ROAD) {
             //avoid the car to get stuck into the wall:
             carInstance.positionX -= Math.cos(carInstance.ang) * carInstance.speed;

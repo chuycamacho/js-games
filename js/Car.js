@@ -37,6 +37,7 @@ function carClass() {
     this.start = function(image, name) {
         this.carImage = image;
         this.carName = name;
+        this.speed = 0;
         for (let row = 0; row < TRACK_ROWS; row++) {
             for (let col = 0; col < TRACK_COLS; col++) {
                 if (trackGrid[row][col] == TRACK_CAR) {

@@ -17,6 +17,14 @@ function startGame() {
     setInterval(updateEnvironment, 1000 / framesPerSecond);
     
     setupInput();
+    loadCircuit(circuitOneGrid);
+}
+
+function loadCircuit(circuit) {
+    trackGrid = circuit.map(function(arr) {
+        return arr.slice();
+    });
+
     greenCar.start(carTwoPic, "GreenMachine");
     blueCar.start(carOnePic, "BlueStorm");
 }
