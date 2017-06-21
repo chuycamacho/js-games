@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Brick collision game</title>
+</head>
+
+<body>
+
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <script>
+        const BALL_DIMENSION = 10;
+        const PADDLE_THICKNESS = 10;
+        const PADDLE_WIDTH = 100;
+        const PADDLE_DISTANCE_FROM_EDGE = 60;
+        const BRICK_WIDTH = 80;
+        const BRICK_HEIGHT = 20;
+        const BRICK_GAP = 2;
+        const BRICK_COLS = 10;
+        const BRICK_ROWS = 14;
+
+        let canvas;
+        let canvasContext;
+        let ballPositionX = 50;
+        let ballPositionY = 50;
+        let ballSpeedX = 5;
+        let ballSpeedY = 7;
+        let paddlePositionX = 350;
+        let showWinScreen = false;
+        let mouseX;
+        let mouseY;
+        let brickGrid;
+        let bricksLeft = 0;
+
+        window.onload = function () {
+            canvas = document.getElementById('gameCanvas');
+            canvasContext = canvas.getContext('2d');
+            const framesPerSecond = 30;
+            
+            brickReset();
+            ballReset();
+
+            setInterval(updateEnvironment, 1000 / framesPerSecond);
+            canvas.addEventListener('mousemove', playerPaddleMovement);
+            canvas.addEventListener('mousedown', restartGame);
+        }
+
+        function updateEnvironment() {
+            environmentMovement();
+            drawEverything();
+        }
+
+        function restartGame(event) {
+            if (showWinScreen === true) {
+                showWinScreen = false;
+                brickReset();
+                ballReset();
+            }
+        }
+
+        function ballReset() {
+            ballPositionX = canvas.width / 2;
+            ballPositionY = canvas.height / 2;
+            ballSpeedX = 0;
+            ballSpeedY = 7;
+        }
+
+        function brickReset() {
+            brickGrid = new Array(BRICK_COLS);
+            for (let col = 0; col < BRICK_COLS; col++) {
+                 brickGrid[col] = new Array(BRICK_COLS);
+                for (let row = 3; row < BRICK_ROWS; row++) {
+                    if (row < 3) {
+                        brickGrid[col][row] = false;
+                    } else {
+                        brickGrid[col][row] = true;
+                        bricksLeft++;
+                    }
+                }
+            }
+        }
+
+        //--------DRAWING
+        function drawEverything() {
+            //field:
+            drawRect(0, 0, canvas.width, canvas.height, 'black');
+
+            //winning condition
+            if (showWinScreen) {
+                canvasContext.fillStyle = 'white';
+                canvasContext.fillText('You won! Click to continue', 350, 300);
+                return;
+            }
+
+            //paddle:
+            drawRect(paddlePositionX, canvas.height - PADDLE_DISTANCE_FROM_EDGE, PADDLE_WIDTH, PADDLE_THICKNESS,'white');
+            //ball:
+            drawCircle(ballPositionX, ballPositionY, BALL_DIMENSION, 'white')
+            //bricks:
+            drawBricks();
+            //mouse for testing::
+            //drawMousePointer();
+        }
+
+        function drawBricks() {
+            for (let col = 0; col < BRICK_COLS; col++) {
+                for (let row = 0; row < BRICK_ROWS; row++) {
+                    if (brickGrid[col][row] == true) {
+                        drawRect(col * BRICK_WIDTH, row * BRICK_HEIGHT, BRICK_WIDTH - BRICK_GAP, BRICK_HEIGHT - BRICK_GAP, 'blue');
+                    }
+                }
+            }
+        }
+
+        function drawRect(positionX, positionY, width, height, drawColor) {
+            canvasContext.fillStyle = drawColor;
+            canvasContext.fillRect(positionX, positionY, width, height);
+        }
+
+        function drawCircle(centerX, centerY, radius, color) {
+            canvasContext.fillStyle = color;
+            canvasContext.beginPath();
+            canvasContext.arc(centerX, centerY, radius, 0, Math.PI * 2, true);
+            canvasContext.fill();
+        }
+
+        function drawText(text, textX, textY, color) {
+            canvasContext.fillStyle = color;
+            canvasContext.fillText(text, textX, textY);
+        }
+
+        function drawMousePointer() {
+            let mouseBrickCol = Math.floor(mouseX / BRICK_WIDTH);
+            let mouseBrickRow = Math.floor(mouseY / BRICK_HEIGHT);
+            drawText(mouseBrickCol + ',' + mouseBrickRow, mouseX, mouseY, 'yellow');
+        }
+
+        //--------MOVEMENT
+        function environmentMovement() {
+            if (showWinScreen) {
+                return;
+            }
+            ballMovement();
+            ballPaddleHandling();
+            ballBrickHandling();
+        }
+
+        function ballMovement() {
+            //ball movement:
+            ballPositionX += ballSpeedX;
+            ballPositionY += ballSpeedY;
+
+            //ball bouncing right:
+            if (ballPositionX > canvas.width && ballSpeedX > 0.0) {
+                ballSpeedX *= -1;
+            }
+            //ball bouncing left:
+            if (ballPositionX < BALL_DIMENSION && ballSpeedX < 0.0) {
+                ballSpeedX *= -1;
+            }
+
+            //ball bouncing top/bottom:
+            if (ballPositionY < BALL_DIMENSION) {
+                ballSpeedY *= -1;
+            } else if (ballPositionY > (canvas.height - BALL_DIMENSION)) {
+                brickReset();
+                ballReset();
+            }
+        }
+
+        function ballPaddleHandling() {
+            let paddleTopEdge = canvas.height - PADDLE_DISTANCE_FROM_EDGE;
+            let paddleBottomEdge = paddleTopEdge + PADDLE_THICKNESS;
+            let paddleLeftEdge = paddlePositionX;
+            let paddleRightEdge = paddlePositionX + PADDLE_WIDTH;
+            if (ballPositionY > paddleTopEdge &&
+                ballPositionY < paddleBottomEdge &&
+                ballPositionX > paddleLeftEdge &&
+                ballPositionX < paddleRightEdge) {
+
+                ballSpeedY *= -1;
+                let ballDistanceFromPaddleCenter = ballPositionX - (paddlePositionX + PADDLE_WIDTH / 2);
+                ballSpeedX = ballDistanceFromPaddleCenter * .35
+            }
+        }
+
+        function ballBrickHandling() {
+            let ballPositionCol = Math.floor(ballPositionX/BRICK_WIDTH);
+            let ballPositionRow = Math.floor(ballPositionY/BRICK_HEIGHT);
+            if (ballPositionCol >= 0 && ballPositionCol < BRICK_COLS && ballPositionRow >= 0 && ballPositionRow < BRICK_ROWS) {
+                if (isBrickAtColRow(ballPositionCol,ballPositionRow)) {
+                    //remove the brick:
+                    brickGrid[ballPositionCol][ballPositionRow] = false;
+                    bricksLeft--;
+
+                    if (bricksLeft == 0) {
+                        showWinScreen = true;
+                    }
+                    
+                    //make the ball bounce:
+                    let bothTestFailed = true;
+                    let previousBallPositionCol = Math.floor((ballPositionX- ballSpeedX)/BRICK_WIDTH);
+                    let previousBallPositionRow = Math.floor((ballPositionY- ballSpeedY)/BRICK_HEIGHT);
+
+                    if (previousBallPositionCol != ballPositionCol) {
+                        if (isBrickAtColRow(previousBallPositionCol,ballPositionRow) == false) {
+                            ballSpeedX *= -1;
+                            bothTestFailed = false;
+                        }
+                    } 
+                    if (previousBallPositionRow != ballPositionRow) {
+                        if (isBrickAtColRow(ballPositionCol,previousBallPositionRow) == false) {
+                            ballSpeedY *= -1;
+                            bothTestFailed = false;
+                        }
+                    }
+                    if (bothTestFailed) { //armpit case: prevent the ball going through a corner
+                        ballSpeedX *= -1;
+                        ballSpeedY *= -1;
+                    }
+                }
+            }
+        }
+
+        function isBrickAtColRow(col, row) {
+            if (col >= 0 && col < BRICK_COLS && row >= 0 && row < BRICK_ROWS) {
+                return brickGrid[col][row];
+            }
+            else {
+                return false;
+            }
+        }
+
+        function playerPaddleMovement(event) {
+            let mousePosition = calculateMousePosition(event);
+            paddlePositionX = mousePosition.x - (PADDLE_WIDTH / 2);
+            //avoid the paddle to go off limits:
+            if (paddlePositionX < 0) {
+                paddlePositionX = 0;
+            } else if (paddlePositionX > (canvas.width - PADDLE_WIDTH)) {
+                paddlePositionX = canvas.height - PADDLE_WIDTH;
+            }
+        }
+
+        function calculateMousePosition(event) {
+            let rect = canvas.getBoundingClientRect();
+            let root = document.documentElement;
+            mouseX = event.clientX - rect.left - root.scrollLeft;
+            mouseY = event.clientY - rect.top - root.scrollTop;
+
+            //test cheat: will position the ball wherever the mouse is
+            // ballPositionX = mouseX;
+            // ballPositionY = mouseY;
+            // ballSpeedX = 3;
+            // ballSpeedY = -4;
+
+            return {
+                x: mouseX,
+                y: mouseY
+            };
+        }
+    </script>
+
+</body>
+
+</html>
