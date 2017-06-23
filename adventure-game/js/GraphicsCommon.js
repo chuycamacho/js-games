@@ -1,3 +1,4 @@
+
 function drawImageCenteredWithRotation(img, atX, atY, ang) {
     canvasContext.save();
     canvasContext.translate(atX, atY);

@@ -16,28 +16,28 @@ function setupInput() {
     document.addEventListener('keydown', keyPressed);
     document.addEventListener('keyup', keyReleased);
 
-    warrior.setupInput(KEY_UP_ARROW, KEY_RIGHT_ARROW, KEY_DOWN_ARROW, KEY_LEFT_ARROW);
+    character.setupInput(KEY_UP_ARROW, KEY_RIGHT_ARROW, KEY_DOWN_ARROW, KEY_LEFT_ARROW);
 }
 
-function setKeyHeldFlag(warrior, value, event) {
-    if (event.keyCode == warrior.controlKeyLeft) {
-        warrior.keyHeld_West = value;
-    } else if (event.keyCode == warrior.controlKeyRight) {
-        warrior.keyHeld_East = value;
-    } else if (event.keyCode == warrior.controlKeyUp) {
-        warrior.keyHeld_North = value;
-    } else if (event.keyCode == warrior.controlKeyDown) {
-        warrior.keyHeld_South = value;
+function setKeyHeldFlag(character, value, event) {
+    if (event.keyCode == character.controlKeyLeft) {
+        character.keyHeld_West = value;
+    } else if (event.keyCode == character.controlKeyRight) {
+        character.keyHeld_East = value;
+    } else if (event.keyCode == character.controlKeyUp) {
+        character.keyHeld_North = value;
+    } else if (event.keyCode == character.controlKeyDown) {
+        character.keyHeld_South = value;
     }
 }
 
 function keyPressed(event) {
-    setKeyHeldFlag(warrior, true, event);
+    setKeyHeldFlag(character, true, event);
     event.preventDefault();
 }
 
 function keyReleased(event) {
-    setKeyHeldFlag(warrior, false, event);
+    setKeyHeldFlag(character, false, event);
     event.preventDefault();
 }
 

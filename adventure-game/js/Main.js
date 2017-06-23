@@ -2,13 +2,13 @@ let canvas;
 let canvasContext;
 let showWinScreen = false;
 
-let warrior = new warriorClass();
+let character = new characterClass(PRINCESS_TYPE);
 
 window.onload = function () {
     canvas = document.getElementById('gameCanvas');
     canvasContext = canvas.getContext('2d');
 
-    loadImages();
+    loadImages(character.type);
 }
 
 function startGame() {
@@ -24,7 +24,7 @@ function loadScenario(scenario) {
         return arr.slice();
     });
 
-    warrior.start(warriorPic, "The Warrior");
+    character.start(characterImage, "The Warrior");
 }
 
 function setLoadingScreen() {
@@ -41,7 +41,7 @@ function environmentMovement() {
     if (showWinScreen) {
         return;
     }
-    warrior.move();
+    character.move();
 }
 
 function drawEverything() {
@@ -52,12 +52,12 @@ function drawEverything() {
         return;
     }
     drawWorld();
-    warrior.draw();
+    character.draw();
 }
 
 function restartGame(event) {
     if (showWinScreen === true) {
-        warrior.reset();
+        character.reset();
         showWinScreen = false;
     }
 }
