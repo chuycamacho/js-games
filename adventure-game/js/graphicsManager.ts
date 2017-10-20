@@ -33,7 +33,7 @@ export module GraphicsManager {
         drawText(canvasContext, mouseWorldCol + ',' + mouseWorldRow, mousePosX, mousePosY, 'yellow');
     }
 
-    function drawImage(canvasContext: any, img: any, atX: number, atY: number): void {
+    export function drawImage(canvasContext: any, img: any, atX: number, atY: number): void {
         canvasContext.drawImage(img, atX, atY);
     }
 

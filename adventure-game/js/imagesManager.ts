@@ -78,7 +78,7 @@ export module ImagesManager {
     function registerImageLoadedAndStartGameWhenReady() {
         imagesLeftToLoad--;
         if (imagesLeftToLoad == 0) {
-            startGame();
+            //startGame();//TODO
         }
     }
 }

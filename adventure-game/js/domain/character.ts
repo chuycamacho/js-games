@@ -26,4 +26,5 @@ export interface Character {
 
     move();
     draw();
+    reactToKeyStroke(keyCode: number, keyPressed: boolean);
 }

@@ -79,6 +79,18 @@ export class CharacterBase implements Character {
     };
 
     draw() {
-        //GraphicsManager.drawImageCenteredWithRotation(this.image, this.positionX, this.positionY, EnvConstants.IMAGE_DEFAULT_ANG);
+        //GraphicsManager.drawImageCenteredWithRotation(this.image, this.positionX, this.positionY, EnvConstants.IMAGE_DEFAULT_ANG);//TODO
+    };
+
+    reactToKeyStroke(keyCode: number, keyPressed: boolean) {
+        if (keyCode == this.control.controlKeyLeft) {
+            this.keyHeldWest = keyPressed;
+        } else if (keyCode == this.control.controlKeyRight) {
+            this.keyHeldEast = keyPressed;
+        } else if (keyCode == this.control.controlKeyUp) {
+            this.keyHeldNorth = keyPressed;
+        } else if (keyCode == this.control.controlKeyDown) {
+            this.keyHeldSouth = keyPressed;
+        }
     };
 }
