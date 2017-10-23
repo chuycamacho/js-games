@@ -14,10 +14,10 @@ export class CharacterControl {
     readonly controlKeyDown: number;
     readonly controlKeyLeft: number;
 
-    constructor() {
-        this.controlKeyUp = this.KEY_UP_ARROW;
-        this.controlKeyRight = this.KEY_RIGHT_ARROW;
-        this.controlKeyDown = this.KEY_DOWN_ARROW;
-        this.controlKeyLeft = this.KEY_LEFT_ARROW;
+    constructor(mainPlayer: boolean) {
+        this.controlKeyUp = mainPlayer ? this.KEY_UP_ARROW : this.KEY_W;
+        this.controlKeyRight = mainPlayer ? this.KEY_RIGHT_ARROW : this.KEY_D;
+        this.controlKeyDown = mainPlayer ? this.KEY_DOWN_ARROW : this.KEY_S;
+        this.controlKeyLeft = mainPlayer ? this.KEY_LEFT_ARROW : this.KEY_A;
     }
 }

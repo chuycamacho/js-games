@@ -1,4 +1,5 @@
 export module EnvConstants {
+    export const FRAMES_PER_SECOND = 30;
     export const DEFAULT_CHARACTER_SPEED = 3;
     export const IMAGE_DEFAULT_ANG = 0;
     

@@ -1,16 +1,18 @@
 import { CharacterType } from './enums/characterType';
 import { Character } from './domain/character';
+import { Player } from './domain/player';
 import { EnvConstants } from './envConstants';
 import { ImageNames } from './imageNames';
 
-export module ImagesManager {
+export module ImagesManager {//TODO: refactor this...now, every Character will hold an object for it's images, that won't work for similar Character, like enemies
 
     export let worldImages: HTMLImageElement[] = [];
 
     let imagesLeftToLoad = 0;
 
-    export function loadInitialImages(characters: Character[]): void {
+    export function loadInitialImages(player: Player, npcs: Character[], enemies: Character[]): void {
 
+        imagesLeftToLoad = 0;
         let worldImageNames = [{
                 worldCode: EnvConstants.WORLD_GROUND,
                 fileName: ImageNames.GROUND_IMAGE
@@ -58,9 +60,15 @@ export module ImagesManager {
                 createImageElement(charactersToLoad[characterIndex].character.imagesWalkingWest, imgIndex, charactersToLoad[characterIndex].characterWalkingWestImgNames[imgIndex]);
             }
         }
+
+        while (true) {
+            if (imagesLeftToLoad == 0) {
+                return;
+            }
+        }
     }
 
-    function createCharacterImageElement(character: Character, fileName: string) {
+    function createCharacterImageElement(character: Character, fileName: string): void {
         character.image = document.createElement("img");
         loadImage(character.image, fileName);
     }
@@ -70,15 +78,12 @@ export module ImagesManager {
         loadImage(imageArray[code], fileName);
     }
 
-    function loadImage(imgVar: HTMLImageElement, imgName: string) {
-        imgVar.onload = registerImageLoadedAndStartGameWhenReady;
+    function loadImage(imgVar: HTMLImageElement, imgName: string): void {
+        imgVar.onload = registerImageLoaded;
         imgVar.src = imgName;
     }
 
-    function registerImageLoadedAndStartGameWhenReady() {
+    function registerImageLoaded(): void {
         imagesLeftToLoad--;
-        if (imagesLeftToLoad == 0) {
-            //startGame();//TODO
-        }
     }
 }
