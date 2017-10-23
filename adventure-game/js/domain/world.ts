@@ -23,7 +23,7 @@ export class World {
     constructor(canvasContext: CanvasRenderingContext2D, playerType: CharacterType, initialScenario: number[][])  {
         this.canvasContext = canvasContext;
         this.playerType = playerType;
-        this.setupInput();
+        this.setupEventHooks();
         this.loadScenario(initialScenario);
     }
 
@@ -95,7 +95,7 @@ export class World {
         }
     }
 
-    private setupInput = (): void => {
+    private setupEventHooks = (): void => {
         this.canvasContext.canvas.addEventListener('mousedown', this.manageMouseDown);
         document.addEventListener('keydown', this.manageKeyPressed);
         document.addEventListener('keyup', this.manageKeyReleased);

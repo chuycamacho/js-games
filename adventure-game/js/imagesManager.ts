@@ -4,9 +4,12 @@ import { Player } from './domain/player';
 import { EnvConstants } from './envConstants';
 import { ImageNames } from './imageNames';
 
-export module ImagesManager {//TODO: refactor this...now, every Character will hold an object for it's images, that won't work for similar Character, like enemies
+export module ImagesManager {
 
     export let worldImages: HTMLImageElement[] = [];
+    export let playerImages: HTMLImageElement[] = [];
+    export let npcsImages: HTMLImageElement[][] = [];
+    export let enemiesImages: HTMLImageElement[][] = [];
 
     let imagesLeftToLoad = 0;
 
@@ -35,7 +38,17 @@ export module ImagesManager {//TODO: refactor this...now, every Character will h
             }
         ];
 
-        let charactersToLoad = characters.map(character => {
+        let characterTypesToLoad: any[] = [];
+        characterTypesToLoad.push(
+            {
+                characterType: player.type,
+                characterImgName: ImageNames.characterInitialImageName(player.type),
+                characterWalkingEastImgNames: ImageNames.characterWalkingEastImageNames(player.type),
+                characterWalkingWestImgNames: ImageNames.characterWalkingWestImageNames(player.type)
+            }
+        );
+
+        let charactersToLoad = npcs.concat(enemies).concat(player).map(character => {//TODO: select just unique types
             var characterImageNames = {
                 character: character,
                 characterImgName: ImageNames.characterInitialImageName(character.type),
