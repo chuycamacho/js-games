@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var EnvConstants;
 (function (EnvConstants) {
     EnvConstants.FRAMES_PER_SECOND = 30;
@@ -15,6 +15,6 @@ var EnvConstants;
     EnvConstants.WORLD_GOAL = 2;
     EnvConstants.WORLD_DOOR = 3;
     EnvConstants.WORLD_KEY = 4;
-    EnvConstants.WORLD_WARRIOR = 5;
+    EnvConstants.WORLD_PLAYER = 5;
 })(EnvConstants = exports.EnvConstants || (exports.EnvConstants = {}));
 //# sourceMappingURL=envConstants.js.map

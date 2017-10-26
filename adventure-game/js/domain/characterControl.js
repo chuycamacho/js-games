@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var CharacterControl = (function () {
     function CharacterControl(mainPlayer) {
         this.KEY_UP_ARROW = 38;

@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var WorldTileType;
 (function (WorldTileType) {
     WorldTileType[WorldTileType["Ground"] = 0] = "Ground";

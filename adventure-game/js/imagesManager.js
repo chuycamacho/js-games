@@ -1,9 +1,10 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var characterType_1 = require("./enums/characterType");
 var envConstants_1 = require("./envConstants");
 var imageNames_1 = require("./imageNames");
 var characterImages_1 = require("./dtos/characterImages");
+var app_1 = require("./app");
 var ImagesManager;
 (function (ImagesManager) {
     ImagesManager.worldImages = [];
@@ -30,11 +31,6 @@ var ImagesManager;
                 ImagesManager.charactersImages[key] = chImgs;
             }
         }
-        while (true) {
-            if (imagesLeftToLoad == 0) {
-                return;
-            }
-        }
     }
     ImagesManager.loadInitialImages = loadInitialImages;
     function createImageElement(image, fileName) {
@@ -53,6 +49,10 @@ var ImagesManager;
     }
     function registerImageLoaded() {
         imagesLeftToLoad--;
+        if (imagesLeftToLoad === 0) {
+            console.log('images loaded...');
+            app_1.App.startGame();
+        }
     }
 })(ImagesManager = exports.ImagesManager || (exports.ImagesManager = {}));
 //# sourceMappingURL=imagesManager.js.map

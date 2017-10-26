@@ -14,5 +14,5 @@ export module EnvConstants {
     export const WORLD_GOAL = 2;
     export const WORLD_DOOR = 3;
     export const WORLD_KEY = 4;
-    export const WORLD_WARRIOR = 5;
+    export const WORLD_PLAYER = 5;
 }

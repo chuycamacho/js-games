@@ -2,12 +2,12 @@ import { CharacterType } from '../enums/characterType';
 import { Direction } from '../enums/direction';
 
 export interface Character {
+    
+    currentImage: HTMLImageElement;
+
     readonly id: string;
     readonly name: string;
     readonly type: CharacterType;
-    image: HTMLImageElement;
-    imagesWalkingEast: HTMLImageElement[];
-    imagesWalkingWest: HTMLImageElement[];
 
     positionX: number;
     positionY: number;

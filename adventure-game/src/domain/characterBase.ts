@@ -8,9 +8,8 @@ export class CharacterBase implements Character {
     readonly name: string;
     readonly type: CharacterType;
     
-    image: HTMLImageElement;
-    imagesWalkingEast: HTMLImageElement[];
-    imagesWalkingWest: HTMLImageElement[];
+    currentImage: HTMLImageElement;
+
     positionX: number;
     positionY: number;
     speed: number;
@@ -25,9 +24,8 @@ export class CharacterBase implements Character {
         this.speed = EnvConstants.DEFAULT_CHARACTER_SPEED;
         this.lastFacingDirection = Direction.East;
         this.speed = 0;
+        this.lastFacingDirection = Direction.East;
     }
 
-    public move = (): void => {
-        
-    };
+    public move = (): void => {};
 }

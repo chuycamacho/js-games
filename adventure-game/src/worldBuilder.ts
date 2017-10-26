@@ -12,43 +12,63 @@ export class WorldBuilder {
     private worldGrid: number[][];
     private playerType: CharacterType;
     private playerName: string;
-    private canvasContext: CanvasRenderingContext2D ;
+    private canvasContext: CanvasRenderingContext2D;
     private player: Player;
-    private npcs: Character[];
-    private enemies: Character[];
-    
+    private npcs: Character[] = [];
+    private enemies: Character[] = [];
+
     public mousePosInWorldX: number;
     public mousePosInWorldY: number;
 
-    constructor(canvasContext: CanvasRenderingContext2D, playerType: CharacterType, playerName: string, initialScenario: number[][])  {
+    constructor(canvasContext: CanvasRenderingContext2D, playerType: CharacterType, playerName: string) {
         this.canvasContext = canvasContext;
         this.playerType = playerType;
         this.playerName = playerName;
         this.setupEventHooks();
+    }
+
+    public buildWorld = (initialScenario: number[][]): void => {
+        console.log('loading initial scenario...');
         this.loadScenario(initialScenario);
+
+        console.log('loading characters...');
+        this.loadCharacters();
+
+        console.log('loading images...');
+        ImagesManager.loadInitialImages();
     }
 
     public loadScenario = (scenario: number[][]): void => {
-        this.worldGrid = scenario.map(function(arr) {
+        this.worldGrid = scenario.map(function (arr) {
             return arr.slice();
         });
-        this.loadCharacters();
-        ImagesManager.loadInitialImages();
+    }
+
+    private loadCharacters = (): void => {
+        //TODO: create the character instances (npcs and enemies) depending on their presences in the Scenario
+        for (let row = 0; row <EnvConstants.WORLD_ROWS; row++) {
+            for (let col = 0; col < EnvConstants.WORLD_COLS; col++) {
+                if (this.worldGrid[row][col] == EnvConstants.WORLD_PLAYER) {
+                    this.player = new PlayerBase(this.playerType, this.playerName, true);
+
+                    this.worldGrid[row][col] = EnvConstants.WORLD_GROUND;
+                    this.player.positionX = col * EnvConstants.WORLD_TILE_WIDTH + (EnvConstants.WORLD_TILE_WIDTH / 2);
+                    this.player.positionY = row * EnvConstants.WORLD_TILE_HEIGHT + (EnvConstants.WORLD_TILE_HEIGHT / 2);
+                    return;
+                }
+            }
+        }
+        
     }
 
     public changeWorld = (): void => {
         this.player.move();
         this.enemies.forEach(e => e.move());
         this.npcs.forEach(n => n.move());
-        
-        this.HandlePayerInWorld();
-        
-        this.drawWorld();
-    }
 
-    private loadCharacters = (): void => {
-        //TODO: create the character instances (npcs and enemies) depending on their presences in the Scenario
-        this.player = new PlayerBase(this.playerType, this.playerName, true);
+        this.HandlePlayerInWorld();
+
+        this.drawWorld();
     }
 
     private drawWorld = (): void => {
@@ -57,7 +77,9 @@ export class WorldBuilder {
         for (let row = 0; row < EnvConstants.WORLD_ROWS; row++) {
             for (let col = 0; col < EnvConstants.WORLD_COLS; col++) {
                 let tileType = this.worldGrid[row][col];
-                let useImg = ImagesManager.worldImages[tileType];
+                let useImg = tileType <= 4
+                    ? ImagesManager.worldImages[tileType]
+                    : ImagesManager.worldImages[EnvConstants.WORLD_GROUND];
                 if (this.tileHasTransparency(tileType)) {
                     GraphicsManager.drawImage(this.canvasContext, ImagesManager.worldImages[WorldTileType.Ground], tilePosX, tilePosY);
                 }
@@ -71,18 +93,18 @@ export class WorldBuilder {
     }
 
     private drawCharacters = (): void => {
-        GraphicsManager.drawImageCenteredWithRotation(this.canvasContext, this.player.image, this.player.positionX, this.player.positionY, EnvConstants.IMAGE_DEFAULT_ANG);
-        
-        this.npcs.forEach(npc => 
-            GraphicsManager.drawImageCenteredWithRotation(this.canvasContext, npc.image, npc.positionX, npc.positionY, EnvConstants.IMAGE_DEFAULT_ANG)
+        GraphicsManager.drawImageCenteredWithRotation(this.canvasContext, this.player.currentImage, this.player.positionX, this.player.positionY, EnvConstants.IMAGE_DEFAULT_ANG);
+
+        this.npcs.forEach(npc =>
+            GraphicsManager.drawImageCenteredWithRotation(this.canvasContext, npc.currentImage, npc.positionX, npc.positionY, EnvConstants.IMAGE_DEFAULT_ANG)
         );
 
-        this.enemies.forEach(enemy => 
-            GraphicsManager.drawImageCenteredWithRotation(this.canvasContext, enemy.image, enemy.positionX, enemy.positionY, EnvConstants.IMAGE_DEFAULT_ANG)
+        this.enemies.forEach(enemy =>
+            GraphicsManager.drawImageCenteredWithRotation(this.canvasContext, enemy.currentImage, enemy.positionX, enemy.positionY, EnvConstants.IMAGE_DEFAULT_ANG)
         );
     }
 
-    public HandlePayerInWorld = (): void => {
+    public HandlePlayerInWorld = (): void => {
         let characterPositionCol = Math.floor(this.player.positionX / EnvConstants.WORLD_TILE_WIDTH);
         let characterPositionRow = Math.floor(this.player.positionY / EnvConstants.WORLD_TILE_HEIGHT);
 
@@ -111,7 +133,7 @@ export class WorldBuilder {
         this.signalCharactersToReactToKeyStroke(event, true);
         event.preventDefault();
     }
-    
+
     private manageKeyReleased = (event: any): void => {
         this.signalCharactersToReactToKeyStroke(event, false);
         event.preventDefault();
@@ -138,7 +160,7 @@ export class WorldBuilder {
         let root = document.documentElement;
         this.mousePosInWorldX = event.clientX - rect.left - root.scrollLeft;
         this.mousePosInWorldY = event.clientY - rect.top - root.scrollTop;
-    
+
         return {
             x: this.mousePosInWorldX,
             y: this.mousePosInWorldY

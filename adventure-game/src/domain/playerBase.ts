@@ -3,6 +3,7 @@ import { CharacterBase } from './characterBase';
 import { CharacterControl } from './characterControl';
 import { CharacterType } from '../enums/characterType';
 import { Direction } from '../enums/direction';
+import { ImagesManager } from '../imagesManager';
 
 export class PlayerBase extends CharacterBase implements Player {
 
@@ -14,13 +15,13 @@ export class PlayerBase extends CharacterBase implements Player {
     control: CharacterControl;
 
     constructor(type: CharacterType, name: string, mainPlayer: boolean) {
-        super(name,type);
+        super(name, type);
         this.control = new CharacterControl(mainPlayer);
     }
 
     public move = (): void => {
         let ischaracterWalking = false;
-        let ischaracterWalkingForward = true;
+        let ischaracterWalkingForward = this.lastFacingDirection == Direction.East;
 
         if (this.keyHeldNorth) {
             this.positionY -= this.speed;
@@ -42,18 +43,20 @@ export class PlayerBase extends CharacterBase implements Player {
         }
 
         if (ischaracterWalking) {
-            let walkingImages = ischaracterWalkingForward ? this.imagesWalkingEast : this.imagesWalkingWest;
+            let walkingImages = ischaracterWalkingForward
+                ? ImagesManager.charactersImages[this.type].imagesWalkingEast
+                : ImagesManager.charactersImages[this.type].imagesWalkingWest;
 
             this.lastFacingDirection = ischaracterWalkingForward ? Direction.East : Direction.West;
-            this.image = walkingImages[this.currentWalkingImage];
+            this.currentImage = walkingImages[this.currentWalkingImage];
             this.currentWalkingImage += 1;
             if (this.currentWalkingImage >= walkingImages.length) {
                 this.currentWalkingImage = 0;
             }
         } else {
-            this.image = this.lastFacingDirection === Direction.East ?
-                this.imagesWalkingEast[0] :
-                this.imagesWalkingWest[0];
+            this.currentImage = this.lastFacingDirection === Direction.East
+                ? ImagesManager.charactersImages[this.type].imagesWalkingEast[0]
+                : ImagesManager.charactersImages[this.type].imagesWalkingWest[0];
         }
     };
 

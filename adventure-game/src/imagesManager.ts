@@ -3,11 +3,12 @@ import { Player } from './domain/player';
 import { EnvConstants } from './envConstants';
 import { ImageNames } from './imageNames';
 import { CharacterImages } from './dtos/characterImages';
+import { App } from './app';
 
 export module ImagesManager {
 
     export let worldImages: HTMLImageElement[] = [];
-    export let charactersImages: { [id: number] : CharacterImages; } = {};
+    export let charactersImages: { [id: number]: CharacterImages; } = {};
 
     let imagesLeftToLoad = 0;
 
@@ -24,26 +25,20 @@ export module ImagesManager {
         for (let item in CharacterType) {
             let key = Number(item);
             if (!isNaN(key)) {
-                
+
                 let chImgs = new CharacterImages();
 
                 createImageElement(chImgs.imageDefault, ImageNames.characterInitialImageName(key));
-                
+
                 for (let imgIndex = 0; imgIndex < ImageNames.characterWalkingEastImageNames(key).length; imgIndex++) {
-                    createImageElementForArray(chImgs.imagesWalkingEast, imgIndex,ImageNames.characterWalkingEastImageNames(key)[imgIndex]);
+                    createImageElementForArray(chImgs.imagesWalkingEast, imgIndex, ImageNames.characterWalkingEastImageNames(key)[imgIndex]);
                 }
 
                 for (let imgIndex = 0; imgIndex < ImageNames.characterWalkingWestImageNames(key).length; imgIndex++) {
-                    createImageElementForArray(chImgs.imagesWalkingWest, imgIndex,ImageNames.characterWalkingWestImageNames(key)[imgIndex]);
+                    createImageElementForArray(chImgs.imagesWalkingWest, imgIndex, ImageNames.characterWalkingWestImageNames(key)[imgIndex]);
                 }
 
                 charactersImages[key] = chImgs;
-            }
-        }
-
-        while (true) {
-            if (imagesLeftToLoad == 0) {
-                return;
             }
         }
     }
@@ -67,5 +62,9 @@ export module ImagesManager {
 
     function registerImageLoaded(): void {
         imagesLeftToLoad--;
+        if (imagesLeftToLoad === 0) {
+            console.log('images loaded...');
+            App.startGame();
+        }
     }
 }

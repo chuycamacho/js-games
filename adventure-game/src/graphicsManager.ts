@@ -2,7 +2,7 @@ import { EnvConstants } from './envConstants';
 
 export module GraphicsManager {
 
-    export function drawImageCenteredWithRotation(canvasContext: any, img: any, atX: number, atY: number, ang: number): void {
+    export function drawImageCenteredWithRotation(canvasContext: any, img: HTMLImageElement, atX: number, atY: number, ang: number): void {
         canvasContext.save();
         canvasContext.translate(atX, atY);
         canvasContext.rotate(ang);

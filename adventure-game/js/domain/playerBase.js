@@ -9,16 +9,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var characterBase_1 = require("./characterBase");
 var characterControl_1 = require("./characterControl");
+var imagesManager_1 = require("../imagesManager");
 var PlayerBase = (function (_super) {
     __extends(PlayerBase, _super);
     function PlayerBase(type, name, mainPlayer) {
         var _this = _super.call(this, name, type) || this;
         _this.move = function () {
             var ischaracterWalking = false;
-            var ischaracterWalkingForward = true;
+            var ischaracterWalkingForward = _this.lastFacingDirection == 4;
             if (_this.keyHeldNorth) {
                 _this.positionY -= _this.speed;
                 ischaracterWalking = true;
@@ -38,18 +39,20 @@ var PlayerBase = (function (_super) {
                 ischaracterWalkingForward = true;
             }
             if (ischaracterWalking) {
-                var walkingImages = ischaracterWalkingForward ? _this.imagesWalkingEast : _this.imagesWalkingWest;
+                var walkingImages = ischaracterWalkingForward
+                    ? imagesManager_1.ImagesManager.charactersImages[_this.type].imagesWalkingEast
+                    : imagesManager_1.ImagesManager.charactersImages[_this.type].imagesWalkingWest;
                 _this.lastFacingDirection = ischaracterWalkingForward ? 4 : 3;
-                _this.image = walkingImages[_this.currentWalkingImage];
+                _this.currentImage = walkingImages[_this.currentWalkingImage];
                 _this.currentWalkingImage += 1;
                 if (_this.currentWalkingImage >= walkingImages.length) {
                     _this.currentWalkingImage = 0;
                 }
             }
             else {
-                _this.image = _this.lastFacingDirection === 4 ?
-                    _this.imagesWalkingEast[0] :
-                    _this.imagesWalkingWest[0];
+                _this.currentImage = _this.lastFacingDirection === 4
+                    ? imagesManager_1.ImagesManager.charactersImages[_this.type].imagesWalkingEast[0]
+                    : imagesManager_1.ImagesManager.charactersImages[_this.type].imagesWalkingWest[0];
             }
         };
         _this.reactToKeyStroke = function (keyCode, keyPressed) {
