@@ -50,7 +50,6 @@ var ImagesManager;
     function registerImageLoaded() {
         imagesLeftToLoad--;
         if (imagesLeftToLoad === 0) {
-            console.log('images loaded...');
             app_1.App.startGame();
         }
     }

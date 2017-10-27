@@ -1,4 +1,4 @@
-import { CharacterType } from './enums/characterType';
+import { CharacterType } from '../enums/characterType';
 
 export module ImageNames {
     export const WARRIOR_INITIAL_IMAGE = "./images/warrior/warrior_standing_east.png";

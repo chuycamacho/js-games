@@ -4,7 +4,6 @@ var envConstants_1 = require("./envConstants");
 var GraphicsManager;
 (function (GraphicsManager) {
     function drawImageCenteredWithRotation(canvasContext, img, atX, atY, ang) {
-        console.log('drawing character...', img, atX, atY, ang);
         canvasContext.save();
         canvasContext.translate(atX, atY);
         canvasContext.rotate(ang);

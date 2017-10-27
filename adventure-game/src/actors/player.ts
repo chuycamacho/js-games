@@ -9,5 +9,5 @@ export interface Player extends Character{
 
     control: CharacterControl;
 
-    reactToKeyStroke(keyCode: number, keyPressed: boolean): void;
+    reactToKeyStroke(keyCode: number, keyPressed: boolean): void;    
 }

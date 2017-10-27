@@ -1,6 +1,6 @@
-import { EnvConstants } from './envConstants';
-import { WorldBuilder } from './worldBuilder';
-import { Scenarios } from './scenarios';
+import { EnvConstants } from './constants/envConstants';
+import { WorldBuilder } from './workers/worldBuilder';
+import { Scenarios } from './constants/scenarios';
 import { CharacterType } from './enums/characterType';
 
 export module App {
@@ -18,11 +18,11 @@ export module App {
     }
 
     export function startGame() {
-        setInterval(updateEnvironment(worldBuilderInstance), 1000 / EnvConstants.FRAMES_PER_SECOND);
         console.log('starting game...');
+        setInterval(updateEnvironment, 1000 / EnvConstants.FRAMES_PER_SECOND);
     }
 
-    function updateEnvironment(worldBuilder: WorldBuilder) : void {
-        worldBuilder.changeWorld();
+    function updateEnvironment() : void {
+        worldBuilderInstance.changeWorld();
     }
 }

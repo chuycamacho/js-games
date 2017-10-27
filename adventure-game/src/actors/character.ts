@@ -13,8 +13,11 @@ export interface Character {
     positionY: number;
     speed: number;
 
+    isWalking: boolean;
     currentWalkingImage: number;
-    lastFacingDirection: Direction;
+    lastWalkingXDirection: Direction;
+    lastWalkingYDirection: Direction;
 
     move(): void;
+    stopAgainstSurface(): void;
 }

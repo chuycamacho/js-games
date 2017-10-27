@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var envConstants_1 = require("./constants/envConstants");
+var envConstants_1 = require("../constants/envConstants");
 var scenographer_1 = require("./scenographer");
 var imagesLoader_1 = require("./imagesLoader");
-var playerBase_1 = require("./actors/playerBase");
+var playerBase_1 = require("../actors/playerBase");
 var WorldBuilder = (function () {
     function WorldBuilder(canvasContext, playerType, playerName) {
         var _this = this;

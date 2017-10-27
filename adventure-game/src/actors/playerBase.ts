@@ -3,7 +3,6 @@ import { CharacterBase } from './characterBase';
 import { CharacterControl } from './characterControl';
 import { CharacterType } from '../enums/characterType';
 import { Direction } from '../enums/direction';
-import { ImagesManager } from '../imagesManager';
 
 export class PlayerBase extends CharacterBase implements Player {
 
@@ -20,45 +19,43 @@ export class PlayerBase extends CharacterBase implements Player {
     }
 
     public move = (): void => {
-        let ischaracterWalking = false;
-        let ischaracterWalkingForward = this.lastFacingDirection == Direction.East;
+        this.isWalking = false;
 
         if (this.keyHeldNorth) {
+            this.lastWalkingYDirection = Direction.North;
             this.positionY -= this.speed;
-            ischaracterWalking = true;
-        }
-        if (this.keyHeldSouth) {
+            this.isWalking = true;
+        } else if (this.keyHeldSouth) {
+            this.lastWalkingYDirection = Direction.South;
             this.positionY += this.speed;
-            ischaracterWalking = true;
+            this.isWalking = true;
         }
+
         if (this.keyHeldWest) {
+            this.lastWalkingXDirection = Direction.West;
             this.positionX -= this.speed;
-            ischaracterWalking = true;
-            ischaracterWalkingForward = false;
-        }
-        if (this.keyHeldEast) {
+            this.isWalking = true;
+        } else if (this.keyHeldEast) {
+            this.lastWalkingXDirection = Direction.East;
             this.positionX += this.speed;
-            ischaracterWalking = true;
-            ischaracterWalkingForward = true;
-        }
-
-        if (ischaracterWalking) {
-            let walkingImages = ischaracterWalkingForward
-                ? ImagesManager.charactersImages[this.type].imagesWalkingEast
-                : ImagesManager.charactersImages[this.type].imagesWalkingWest;
-
-            this.lastFacingDirection = ischaracterWalkingForward ? Direction.East : Direction.West;
-            this.currentImage = walkingImages[this.currentWalkingImage];
-            this.currentWalkingImage += 1;
-            if (this.currentWalkingImage >= walkingImages.length) {
-                this.currentWalkingImage = 0;
-            }
-        } else {
-            this.currentImage = this.lastFacingDirection === Direction.East
-                ? ImagesManager.charactersImages[this.type].imagesWalkingEast[0]
-                : ImagesManager.charactersImages[this.type].imagesWalkingWest[0];
+            this.isWalking = true;
         }
     };
+
+    public stopAgainstSurface = (): void => {
+        if (this.keyHeldNorth && this.lastWalkingYDirection == Direction.North) {
+            this.positionY += this.speed;
+        } else if (this.keyHeldSouth && this.lastWalkingYDirection == Direction.South) {
+            this.positionY -= this.speed;
+        }
+
+        if (this.keyHeldEast && this.lastWalkingXDirection == Direction.East) {
+            this.positionX -= this.speed;
+        } else if (this.keyHeldWest && this.lastWalkingXDirection == Direction.West) {
+            this.positionX += this.speed;
+        }
+        this.isWalking = false;
+    }
 
     public reactToKeyStroke = (keyCode: number, keyPressed: boolean): void => {
         if (keyCode == this.control.controlKeyLeft) {
@@ -71,4 +68,6 @@ export class PlayerBase extends CharacterBase implements Player {
             this.keyHeldSouth = keyPressed;
         }
     };
+
+    
 }

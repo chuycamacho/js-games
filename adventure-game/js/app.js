@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var envConstants_1 = require("./envConstants");
-var worldBuilder_1 = require("./worldBuilder");
-var scenarios_1 = require("./scenarios");
+var envConstants_1 = require("./constants/envConstants");
+var worldBuilder_1 = require("./workers/worldBuilder");
+var scenarios_1 = require("./constants/scenarios");
 var characterType_1 = require("./enums/characterType");
 var App;
 (function (App) {
@@ -17,12 +17,12 @@ var App;
         worldBuilderInstance.buildWorld(scenarios_1.Scenarios.SCENARIO_ONE);
     };
     function startGame() {
-        setInterval(updateEnvironment(worldBuilderInstance), 1000 / envConstants_1.EnvConstants.FRAMES_PER_SECOND);
         console.log('starting game...');
+        setInterval(updateEnvironment, 1000 / envConstants_1.EnvConstants.FRAMES_PER_SECOND);
     }
     App.startGame = startGame;
-    function updateEnvironment(worldBuilder) {
-        worldBuilder.changeWorld();
+    function updateEnvironment() {
+        worldBuilderInstance.changeWorld();
     }
 })(App = exports.App || (exports.App = {}));
 //# sourceMappingURL=app.js.map
