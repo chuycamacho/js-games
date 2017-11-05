@@ -1,13 +1,12 @@
 import { CharacterType } from '../enums/characterType';
-import { Player } from '../actors/player';
-import { EnvConstants } from '../constants/envConstants';
+import { ScenarioTileType } from '../enums/scenarioTileType';
 import { ImageNames } from '../constants/imageNames';
 import { CharacterImages } from '../dtos/characterImages';
 import { App } from '../app';
 
-export class ImagesLoader {
+export class BackstageLoader {
 
-    public worldImages: HTMLImageElement[] = [];
+    public scenarioImages: HTMLImageElement[] = [];
     public charactersImages: { [id: number]: CharacterImages; } = {};
 
     private imagesLeftToLoad = 0;
@@ -16,11 +15,11 @@ export class ImagesLoader {
 
         this.imagesLeftToLoad = 0;
 
-        this.createImageElementForArray(this.worldImages, EnvConstants.WORLD_GROUND, ImageNames.GROUND_IMAGE);
-        this.createImageElementForArray(this.worldImages, EnvConstants.WORLD_WALL, ImageNames.WALL_IMAGE);
-        this.createImageElementForArray(this.worldImages, EnvConstants.WORLD_GOAL, ImageNames.GOAL_IMAGE);
-        this.createImageElementForArray(this.worldImages, EnvConstants.WORLD_DOOR, ImageNames.DOOR_IMAGE);
-        this.createImageElementForArray(this.worldImages, EnvConstants.WORLD_KEY, ImageNames.KEY_IMAGE);
+        this.createImageElementForArray(this.scenarioImages, ScenarioTileType.Ground, ImageNames.GROUND_IMAGE);
+        this.createImageElementForArray(this.scenarioImages, ScenarioTileType.Wall, ImageNames.WALL_IMAGE);
+        this.createImageElementForArray(this.scenarioImages, ScenarioTileType.Goal, ImageNames.GOAL_IMAGE);
+        this.createImageElementForArray(this.scenarioImages, ScenarioTileType.Door, ImageNames.DOOR_IMAGE);
+        this.createImageElementForArray(this.scenarioImages, ScenarioTileType.Key, ImageNames.KEY_IMAGE);
 
         for (let item in CharacterType) {
             let key = Number(item);

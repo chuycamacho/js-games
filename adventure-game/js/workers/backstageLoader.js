@@ -1,23 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var characterType_1 = require("./enums/characterType");
-var envConstants_1 = require("./constants/envConstants");
-var imageNames_1 = require("./constants/imageNames");
-var characterImages_1 = require("./dtos/characterImages");
-var app_1 = require("./app");
-var ImagesLoader = (function () {
-    function ImagesLoader() {
+var characterType_1 = require("../enums/characterType");
+var imageNames_1 = require("../constants/imageNames");
+var characterImages_1 = require("../dtos/characterImages");
+var app_1 = require("../app");
+var BackstageLoader = (function () {
+    function BackstageLoader() {
         var _this = this;
-        this.worldImages = [];
+        this.scenarioImages = [];
         this.charactersImages = {};
         this.imagesLeftToLoad = 0;
         this.loadInitialImages = function () {
             _this.imagesLeftToLoad = 0;
-            _this.createImageElementForArray(_this.worldImages, envConstants_1.EnvConstants.WORLD_GROUND, imageNames_1.ImageNames.GROUND_IMAGE);
-            _this.createImageElementForArray(_this.worldImages, envConstants_1.EnvConstants.WORLD_WALL, imageNames_1.ImageNames.WALL_IMAGE);
-            _this.createImageElementForArray(_this.worldImages, envConstants_1.EnvConstants.WORLD_GOAL, imageNames_1.ImageNames.GOAL_IMAGE);
-            _this.createImageElementForArray(_this.worldImages, envConstants_1.EnvConstants.WORLD_DOOR, imageNames_1.ImageNames.DOOR_IMAGE);
-            _this.createImageElementForArray(_this.worldImages, envConstants_1.EnvConstants.WORLD_KEY, imageNames_1.ImageNames.KEY_IMAGE);
+            _this.createImageElementForArray(_this.scenarioImages, 0, imageNames_1.ImageNames.GROUND_IMAGE);
+            _this.createImageElementForArray(_this.scenarioImages, 1, imageNames_1.ImageNames.WALL_IMAGE);
+            _this.createImageElementForArray(_this.scenarioImages, 2, imageNames_1.ImageNames.GOAL_IMAGE);
+            _this.createImageElementForArray(_this.scenarioImages, 3, imageNames_1.ImageNames.DOOR_IMAGE);
+            _this.createImageElementForArray(_this.scenarioImages, 4, imageNames_1.ImageNames.KEY_IMAGE);
             for (var item in characterType_1.CharacterType) {
                 var key = Number(item);
                 if (!isNaN(key)) {
@@ -54,7 +53,7 @@ var ImagesLoader = (function () {
             }
         };
     }
-    return ImagesLoader;
+    return BackstageLoader;
 }());
-exports.ImagesLoader = ImagesLoader;
-//# sourceMappingURL=imagesLoader.js.map
+exports.BackstageLoader = BackstageLoader;
+//# sourceMappingURL=backstageLoader.js.map

@@ -2,9 +2,26 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var envConstants_1 = require("../constants/envConstants");
 var Scenographer = (function () {
-    function Scenographer(imagesLoader, canvasContext) {
+    function Scenographer(backstageLoader, canvasContext) {
         var _this = this;
-        this.drawCharacters = function (player, npcs, enemies) {
+        this.setCharacterImage = function (character) {
+            if (character.isWalking) {
+                var walkingImages = character.lastWalkingXDirection == 4
+                    ? _this.backstageLoader.charactersImages[character.type].imagesWalkingEast
+                    : _this.backstageLoader.charactersImages[character.type].imagesWalkingWest;
+                character.currentImage = walkingImages[character.currentWalkingImage];
+                character.currentWalkingImage += 1;
+                if (character.currentWalkingImage >= walkingImages.length) {
+                    character.currentWalkingImage = 0;
+                }
+            }
+            else {
+                character.currentImage = character.lastWalkingXDirection === 4
+                    ? _this.backstageLoader.charactersImages[character.type].imagesWalkingEast[0]
+                    : _this.backstageLoader.charactersImages[character.type].imagesWalkingWest[0];
+            }
+        };
+        this.putCharactersOnScenario = function (player, npcs, enemies) {
             _this.drawImageCenteredWithRotation(player.currentImage, player.positionX, player.positionY, envConstants_1.EnvConstants.IMAGE_DEFAULT_ANG);
             npcs.forEach(function (npc) {
                 return _this.drawImageCenteredWithRotation(npc.currentImage, npc.positionX, npc.positionY, envConstants_1.EnvConstants.IMAGE_DEFAULT_ANG);
@@ -14,7 +31,7 @@ var Scenographer = (function () {
             });
         };
         this.tileHasTransparency = function (tileType) {
-            return (tileType == 4 || tileType == 2 || tileType == 2);
+            return (tileType == 4 || tileType == 2 || tileType == 3);
         };
         this.drawImageCenteredWithRotation = function (img, atX, atY, ang) {
             _this.canvasContext.save();
@@ -45,20 +62,20 @@ var Scenographer = (function () {
         this.drawImage = function (img, atX, atY) {
             _this.canvasContext.drawImage(img, atX, atY);
         };
-        this.imagesLoader = imagesLoader;
+        this.backstageLoader = backstageLoader;
         this.canvasContext = canvasContext;
     }
-    Scenographer.prototype.drawWorld = function (worldGrid) {
+    Scenographer.prototype.buildScenario = function (scenario, player, npcs, enemies) {
         var tilePosX = 0;
         var tilePosY = 0;
         for (var row = 0; row < envConstants_1.EnvConstants.WORLD_ROWS; row++) {
             for (var col = 0; col < envConstants_1.EnvConstants.WORLD_COLS; col++) {
-                var tileType = worldGrid[row][col];
+                var tileType = scenario[row][col];
                 var useImg = tileType <= 4
-                    ? this.imagesLoader.worldImages[tileType]
-                    : this.imagesLoader.worldImages[envConstants_1.EnvConstants.WORLD_GROUND];
+                    ? this.backstageLoader.scenarioImages[tileType]
+                    : this.backstageLoader.scenarioImages[0];
                 if (this.tileHasTransparency(tileType)) {
-                    this.drawImage(this.imagesLoader.worldImages[0], tilePosX, tilePosY);
+                    this.drawImage(this.backstageLoader.scenarioImages[0], tilePosX, tilePosY);
                 }
                 this.drawImage(useImg, tilePosX, tilePosY);
                 tilePosX += envConstants_1.EnvConstants.WORLD_TILE_WIDTH;
@@ -66,6 +83,8 @@ var Scenographer = (function () {
             tilePosX = 0;
             tilePosY += envConstants_1.EnvConstants.WORLD_TILE_HEIGHT;
         }
+        this.setCharacterImage(player);
+        this.putCharactersOnScenario(player, npcs, enemies);
     };
     return Scenographer;
 }());

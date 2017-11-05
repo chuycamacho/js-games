@@ -1,30 +1,30 @@
 import { EnvConstants } from '../constants/envConstants';
-import { WorldBuilder } from './worldBuilder';
-import { WorldTileType } from '../enums/worldTileType';
-import { ImagesLoader } from './imagesLoader'
+import { ScenarioTileType } from '../enums/scenarioTileType';
+import { BackstageLoader } from './backstageLoader'
 import { Character } from '../actors/character';
+import { Direction } from '../enums/direction';
 
 export class Scenographer {
     
-    private imagesLoader: ImagesLoader;
+    private backstageLoader: BackstageLoader;
     private canvasContext: CanvasRenderingContext2D
 
-    constructor(imagesLoader: ImagesLoader, canvasContext: CanvasRenderingContext2D) {
-        this.imagesLoader = imagesLoader;
+    constructor(backstageLoader: BackstageLoader, canvasContext: CanvasRenderingContext2D) {
+        this.backstageLoader = backstageLoader;
         this.canvasContext = canvasContext;
     }
 
-    public drawWorld(worldGrid: number[][]) {
+    public buildScenario(scenario: number[][], player: Character, npcs: Character[], enemies: Character[]) {
         let tilePosX = 0;
         let tilePosY = 0;
         for (let row = 0; row < EnvConstants.WORLD_ROWS; row++) {
             for (let col = 0; col < EnvConstants.WORLD_COLS; col++) {
-                let tileType = worldGrid[row][col];
+                let tileType = scenario[row][col];
                 let useImg = tileType <= 4
-                    ? this.imagesLoader.worldImages[tileType]
-                    : this.imagesLoader.worldImages[EnvConstants.WORLD_GROUND];
+                    ? this.backstageLoader.scenarioImages[tileType]
+                    : this.backstageLoader.scenarioImages[ScenarioTileType.Ground];
                 if (this.tileHasTransparency(tileType)) {
-                    this.drawImage(this.imagesLoader.worldImages[WorldTileType.Ground], tilePosX, tilePosY);
+                    this.drawImage(this.backstageLoader.scenarioImages[ScenarioTileType.Ground], tilePosX, tilePosY);
                 }
                 this.drawImage(useImg, tilePosX, tilePosY);
                 tilePosX += EnvConstants.WORLD_TILE_WIDTH;
@@ -32,9 +32,29 @@ export class Scenographer {
             tilePosX = 0;
             tilePosY += EnvConstants.WORLD_TILE_HEIGHT;
         }
+        this.setCharacterImage(player);
+        this.putCharactersOnScenario(player, npcs, enemies);
     }
 
-    public drawCharacters = (player: Character, npcs: Character[], enemies: Character[]): void => {
+    private setCharacterImage = (character: Character): void => {
+        if (character.isWalking) {
+            let walkingImages = character.lastWalkingXDirection == Direction.East
+                ? this.backstageLoader.charactersImages[character.type].imagesWalkingEast
+                : this.backstageLoader.charactersImages[character.type].imagesWalkingWest;
+
+            character.currentImage = walkingImages[character.currentWalkingImage];
+            character.currentWalkingImage += 1;
+            if (character.currentWalkingImage >= walkingImages.length) {
+                character.currentWalkingImage = 0;
+            }
+        } else {
+            character.currentImage = character.lastWalkingXDirection === Direction.East
+                ? this.backstageLoader.charactersImages[character.type].imagesWalkingEast[0]
+                : this.backstageLoader.charactersImages[character.type].imagesWalkingWest[0];
+        }
+    }
+
+    private putCharactersOnScenario = (player: Character, npcs: Character[], enemies: Character[]): void => {
         this.drawImageCenteredWithRotation(player.currentImage, player.positionX, player.positionY, EnvConstants.IMAGE_DEFAULT_ANG);
 
         npcs.forEach(npc =>
@@ -47,7 +67,7 @@ export class Scenographer {
     }
 
     private tileHasTransparency = (tileType: number): boolean => {
-        return (tileType == WorldTileType.Key || tileType == WorldTileType.Goal || tileType == WorldTileType.Door);
+        return (tileType == ScenarioTileType.Key || tileType == ScenarioTileType.Goal || tileType == ScenarioTileType.Door);
     }
 
     private drawImageCenteredWithRotation = (img: HTMLImageElement, atX: number, atY: number, ang: number): void  => {

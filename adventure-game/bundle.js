@@ -123,20 +123,20 @@ exports.PlayerBase = PlayerBase;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var envConstants_1 = require("./constants/envConstants");
-var worldBuilder_1 = require("./workers/worldBuilder");
+var producer_1 = require("./workers/producer");
 var scenarios_1 = require("./constants/scenarios");
 var characterType_1 = require("./enums/characterType");
 var App;
 (function (App) {
     var canvas;
     var canvasContext;
-    var worldBuilderInstance;
+    var producer;
     window.onload = function () {
         console.log('setting up game...');
         canvas = document.getElementById('gameCanvas');
         canvasContext = canvas.getContext('2d');
-        worldBuilderInstance = new worldBuilder_1.WorldBuilder(canvasContext, characterType_1.CharacterType.Princess, 'SchonePrinzessin');
-        worldBuilderInstance.buildWorld(scenarios_1.Scenarios.SCENARIO_ONE);
+        producer = new producer_1.Producer(canvasContext, characterType_1.CharacterType.Warrior, 'TheWarrior');
+        producer.buildSet(scenarios_1.Scenarios.SCENARIO_ONE);
     };
     function startGame() {
         console.log('starting game...');
@@ -144,11 +144,11 @@ var App;
     }
     App.startGame = startGame;
     function updateEnvironment() {
-        worldBuilderInstance.changeWorld();
+        producer.changeSet();
     }
 })(App = exports.App || (exports.App = {}));
 
-},{"./constants/envConstants":5,"./constants/scenarios":7,"./enums/characterType":9,"./workers/worldBuilder":12}],5:[function(require,module,exports){
+},{"./constants/envConstants":5,"./constants/scenarios":7,"./enums/characterType":9,"./workers/producer":12}],5:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var EnvConstants;
@@ -161,12 +161,6 @@ var EnvConstants;
     EnvConstants.WORLD_GAP = 2;
     EnvConstants.WORLD_COLS = 20;
     EnvConstants.WORLD_ROWS = 15;
-    EnvConstants.WORLD_GROUND = 0;
-    EnvConstants.WORLD_WALL = 1;
-    EnvConstants.WORLD_GOAL = 2;
-    EnvConstants.WORLD_DOOR = 3;
-    EnvConstants.WORLD_KEY = 4;
-    EnvConstants.WORLD_PLAYER = 5;
 })(EnvConstants = exports.EnvConstants || (exports.EnvConstants = {}));
 
 },{}],6:[function(require,module,exports){
@@ -245,6 +239,23 @@ var Scenarios;
     Scenarios.SCENARIO_ONE = [
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+        [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ];
+    Scenarios.SCENARIO_TWO = [
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
         [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
         [1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1],
         [1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1],
@@ -287,23 +298,22 @@ var CharacterType;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var characterType_1 = require("../enums/characterType");
-var envConstants_1 = require("../constants/envConstants");
 var imageNames_1 = require("../constants/imageNames");
 var characterImages_1 = require("../dtos/characterImages");
 var app_1 = require("../app");
-var ImagesLoader = (function () {
-    function ImagesLoader() {
+var BackstageLoader = (function () {
+    function BackstageLoader() {
         var _this = this;
-        this.worldImages = [];
+        this.scenarioImages = [];
         this.charactersImages = {};
         this.imagesLeftToLoad = 0;
         this.loadInitialImages = function () {
             _this.imagesLeftToLoad = 0;
-            _this.createImageElementForArray(_this.worldImages, envConstants_1.EnvConstants.WORLD_GROUND, imageNames_1.ImageNames.GROUND_IMAGE);
-            _this.createImageElementForArray(_this.worldImages, envConstants_1.EnvConstants.WORLD_WALL, imageNames_1.ImageNames.WALL_IMAGE);
-            _this.createImageElementForArray(_this.worldImages, envConstants_1.EnvConstants.WORLD_GOAL, imageNames_1.ImageNames.GOAL_IMAGE);
-            _this.createImageElementForArray(_this.worldImages, envConstants_1.EnvConstants.WORLD_DOOR, imageNames_1.ImageNames.DOOR_IMAGE);
-            _this.createImageElementForArray(_this.worldImages, envConstants_1.EnvConstants.WORLD_KEY, imageNames_1.ImageNames.KEY_IMAGE);
+            _this.createImageElementForArray(_this.scenarioImages, 0, imageNames_1.ImageNames.GROUND_IMAGE);
+            _this.createImageElementForArray(_this.scenarioImages, 1, imageNames_1.ImageNames.WALL_IMAGE);
+            _this.createImageElementForArray(_this.scenarioImages, 2, imageNames_1.ImageNames.GOAL_IMAGE);
+            _this.createImageElementForArray(_this.scenarioImages, 3, imageNames_1.ImageNames.DOOR_IMAGE);
+            _this.createImageElementForArray(_this.scenarioImages, 4, imageNames_1.ImageNames.KEY_IMAGE);
             for (var item in characterType_1.CharacterType) {
                 var key = Number(item);
                 if (!isNaN(key)) {
@@ -340,18 +350,145 @@ var ImagesLoader = (function () {
             }
         };
     }
-    return ImagesLoader;
+    return BackstageLoader;
 }());
-exports.ImagesLoader = ImagesLoader;
+exports.BackstageLoader = BackstageLoader;
 
-},{"../app":4,"../constants/envConstants":5,"../constants/imageNames":6,"../dtos/characterImages":8,"../enums/characterType":9}],11:[function(require,module,exports){
+},{"../app":4,"../constants/imageNames":6,"../dtos/characterImages":8,"../enums/characterType":9}],11:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var envConstants_1 = require("../constants/envConstants");
+var Director = (function () {
+    function Director(scenario, player, npcs, enemies) {
+        var _this = this;
+        this.npcs = [];
+        this.enemies = [];
+        this.signalCharactersToReactToKeyStroke = function (event, keyPressed) {
+            _this.player.reactToKeyStroke(event.keyCode, keyPressed);
+        };
+        this.handlePlayerOnScenario = function () {
+            var characterPositionCol = Math.floor(_this.player.positionX / envConstants_1.EnvConstants.WORLD_TILE_WIDTH);
+            var characterPositionRow = Math.floor(_this.player.positionY / envConstants_1.EnvConstants.WORLD_TILE_HEIGHT);
+            if (characterPositionCol >= 0 && characterPositionCol < envConstants_1.EnvConstants.WORLD_COLS && characterPositionRow >= 0 && characterPositionRow < envConstants_1.EnvConstants.WORLD_ROWS) {
+                var tileTypeHitted = _this.tileTypeAtColRow(characterPositionRow, characterPositionCol);
+                switch (tileTypeHitted) {
+                    case 2:
+                        break;
+                    case 1:
+                        _this.player.stopAgainstSurface();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+        this.tileTypeAtColRow = function (row, col) {
+            if (col >= 0 && col < envConstants_1.EnvConstants.WORLD_COLS && row >= 0 && row < envConstants_1.EnvConstants.WORLD_ROWS) {
+                return _this.scenario[row][col];
+            }
+            else {
+                return 1;
+            }
+        };
+        this.scenario = scenario;
+        this.player = player;
+        this.npcs = npcs;
+        this.enemies = enemies;
+    }
+    Director.prototype.continuePlay = function () {
+        this.player.move();
+        this.enemies.forEach(function (e) { return e.move(); });
+        this.npcs.forEach(function (n) { return n.move(); });
+        this.handlePlayerOnScenario();
+    };
+    return Director;
+}());
+exports.Director = Director;
+
+},{"../constants/envConstants":5}],12:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var envConstants_1 = require("../constants/envConstants");
+var scenographer_1 = require("./scenographer");
+var backstageLoader_1 = require("./backstageLoader");
+var playerBase_1 = require("../actors/playerBase");
+var director_1 = require("./director");
+var usher_1 = require("./usher");
+var Producer = (function () {
+    function Producer(canvasContext, playerType, playerName) {
+        var _this = this;
+        this.npcs = [];
+        this.enemies = [];
+        this.buildSet = function (initialScenario) {
+            console.log('loading scenario...');
+            _this.loadScenario(initialScenario);
+            console.log('loading characters...');
+            _this.loadCharacters();
+            console.log('loading workers...');
+            _this.backstageLoader = new backstageLoader_1.BackstageLoader();
+            _this.scenographer = new scenographer_1.Scenographer(_this.backstageLoader, _this.canvasContext);
+            _this.director = new director_1.Director(_this.scenario, _this.player, _this.npcs, _this.enemies);
+            _this.usher = new usher_1.Usher(_this.canvasContext, _this.director);
+            console.log('loading images...');
+            _this.backstageLoader.loadInitialImages();
+            console.log('setting audience input...');
+            _this.usher.arrangeAudienceInput();
+        };
+        this.changeSet = function () {
+            _this.director.continuePlay();
+            _this.scenographer.buildScenario(_this.scenario, _this.player, _this.npcs, _this.enemies);
+        };
+        this.loadScenario = function (scenario) {
+            _this.scenario = scenario.map(function (arr) {
+                return arr.slice();
+            });
+        };
+        this.loadCharacters = function () {
+            for (var row = 0; row < envConstants_1.EnvConstants.WORLD_ROWS; row++) {
+                for (var col = 0; col < envConstants_1.EnvConstants.WORLD_COLS; col++) {
+                    if (_this.scenario[row][col] == 5) {
+                        _this.player = new playerBase_1.PlayerBase(_this.playerType, _this.playerName, true);
+                        _this.scenario[row][col] = 0;
+                        _this.player.positionX = col * envConstants_1.EnvConstants.WORLD_TILE_WIDTH + (envConstants_1.EnvConstants.WORLD_TILE_WIDTH / 2);
+                        _this.player.positionY = row * envConstants_1.EnvConstants.WORLD_TILE_HEIGHT + (envConstants_1.EnvConstants.WORLD_TILE_HEIGHT / 2);
+                        return;
+                    }
+                }
+            }
+        };
+        this.playerType = playerType;
+        this.playerName = playerName;
+        this.canvasContext = canvasContext;
+    }
+    return Producer;
+}());
+exports.Producer = Producer;
+
+},{"../actors/playerBase":3,"../constants/envConstants":5,"./backstageLoader":10,"./director":11,"./scenographer":13,"./usher":14}],13:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var envConstants_1 = require("../constants/envConstants");
 var Scenographer = (function () {
-    function Scenographer(imagesLoader, canvasContext) {
+    function Scenographer(backstageLoader, canvasContext) {
         var _this = this;
-        this.drawCharacters = function (player, npcs, enemies) {
+        this.setCharacterImage = function (character) {
+            if (character.isWalking) {
+                var walkingImages = character.lastWalkingXDirection == 4
+                    ? _this.backstageLoader.charactersImages[character.type].imagesWalkingEast
+                    : _this.backstageLoader.charactersImages[character.type].imagesWalkingWest;
+                character.currentImage = walkingImages[character.currentWalkingImage];
+                character.currentWalkingImage += 1;
+                if (character.currentWalkingImage >= walkingImages.length) {
+                    character.currentWalkingImage = 0;
+                }
+            }
+            else {
+                character.currentImage = character.lastWalkingXDirection === 4
+                    ? _this.backstageLoader.charactersImages[character.type].imagesWalkingEast[0]
+                    : _this.backstageLoader.charactersImages[character.type].imagesWalkingWest[0];
+            }
+        };
+        this.putCharactersOnScenario = function (player, npcs, enemies) {
             _this.drawImageCenteredWithRotation(player.currentImage, player.positionX, player.positionY, envConstants_1.EnvConstants.IMAGE_DEFAULT_ANG);
             npcs.forEach(function (npc) {
                 return _this.drawImageCenteredWithRotation(npc.currentImage, npc.positionX, npc.positionY, envConstants_1.EnvConstants.IMAGE_DEFAULT_ANG);
@@ -361,7 +498,7 @@ var Scenographer = (function () {
             });
         };
         this.tileHasTransparency = function (tileType) {
-            return (tileType == 4 || tileType == 2 || tileType == 2);
+            return (tileType == 4 || tileType == 2 || tileType == 3);
         };
         this.drawImageCenteredWithRotation = function (img, atX, atY, ang) {
             _this.canvasContext.save();
@@ -392,20 +529,20 @@ var Scenographer = (function () {
         this.drawImage = function (img, atX, atY) {
             _this.canvasContext.drawImage(img, atX, atY);
         };
-        this.imagesLoader = imagesLoader;
+        this.backstageLoader = backstageLoader;
         this.canvasContext = canvasContext;
     }
-    Scenographer.prototype.drawWorld = function (worldGrid) {
+    Scenographer.prototype.buildScenario = function (scenario, player, npcs, enemies) {
         var tilePosX = 0;
         var tilePosY = 0;
         for (var row = 0; row < envConstants_1.EnvConstants.WORLD_ROWS; row++) {
             for (var col = 0; col < envConstants_1.EnvConstants.WORLD_COLS; col++) {
-                var tileType = worldGrid[row][col];
+                var tileType = scenario[row][col];
                 var useImg = tileType <= 4
-                    ? this.imagesLoader.worldImages[tileType]
-                    : this.imagesLoader.worldImages[envConstants_1.EnvConstants.WORLD_GROUND];
+                    ? this.backstageLoader.scenarioImages[tileType]
+                    : this.backstageLoader.scenarioImages[0];
                 if (this.tileHasTransparency(tileType)) {
-                    this.drawImage(this.imagesLoader.worldImages[0], tilePosX, tilePosY);
+                    this.drawImage(this.backstageLoader.scenarioImages[0], tilePosX, tilePosY);
                 }
                 this.drawImage(useImg, tilePosX, tilePosY);
                 tilePosX += envConstants_1.EnvConstants.WORLD_TILE_WIDTH;
@@ -413,118 +550,35 @@ var Scenographer = (function () {
             tilePosX = 0;
             tilePosY += envConstants_1.EnvConstants.WORLD_TILE_HEIGHT;
         }
+        this.setCharacterImage(player);
+        this.putCharactersOnScenario(player, npcs, enemies);
     };
     return Scenographer;
 }());
 exports.Scenographer = Scenographer;
 
-},{"../constants/envConstants":5}],12:[function(require,module,exports){
+},{"../constants/envConstants":5}],14:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var envConstants_1 = require("../constants/envConstants");
-var scenographer_1 = require("./scenographer");
-var imagesLoader_1 = require("./imagesLoader");
-var playerBase_1 = require("../actors/playerBase");
-var WorldBuilder = (function () {
-    function WorldBuilder(canvasContext, playerType, playerName) {
+var Usher = (function () {
+    function Usher(canvasContext, director) {
         var _this = this;
-        this.npcs = [];
-        this.enemies = [];
-        this.buildWorld = function (initialScenario) {
-            console.log('loading initial scenario...');
-            _this.loadScenario(initialScenario);
-            console.log('loading characters...');
-            _this.loadCharacters();
-            console.log('loading images...');
-            _this.imagesLoader.loadInitialImages();
-        };
-        this.loadScenario = function (scenario) {
-            _this.worldGrid = scenario.map(function (arr) {
-                return arr.slice();
-            });
-        };
-        this.loadCharacters = function () {
-            for (var row = 0; row < envConstants_1.EnvConstants.WORLD_ROWS; row++) {
-                for (var col = 0; col < envConstants_1.EnvConstants.WORLD_COLS; col++) {
-                    if (_this.worldGrid[row][col] == envConstants_1.EnvConstants.WORLD_PLAYER) {
-                        _this.player = new playerBase_1.PlayerBase(_this.playerType, _this.playerName, true);
-                        _this.worldGrid[row][col] = envConstants_1.EnvConstants.WORLD_GROUND;
-                        _this.player.positionX = col * envConstants_1.EnvConstants.WORLD_TILE_WIDTH + (envConstants_1.EnvConstants.WORLD_TILE_WIDTH / 2);
-                        _this.player.positionY = row * envConstants_1.EnvConstants.WORLD_TILE_HEIGHT + (envConstants_1.EnvConstants.WORLD_TILE_HEIGHT / 2);
-                        return;
-                    }
-                }
-            }
-        };
-        this.changeWorld = function () {
-            _this.player.move();
-            _this.enemies.forEach(function (e) { return e.move(); });
-            _this.npcs.forEach(function (n) { return n.move(); });
-            _this.handlePlayerInWorld();
-            _this.setCharacterImage(_this.player);
-            _this.scenographer.drawWorld(_this.worldGrid);
-            _this.scenographer.drawCharacters(_this.player, _this.npcs, _this.enemies);
-        };
-        this.setCharacterImage = function (character) {
-            if (character.isWalking) {
-                var walkingImages = character.lastWalkingXDirection == 4
-                    ? _this.imagesLoader.charactersImages[character.type].imagesWalkingEast
-                    : _this.imagesLoader.charactersImages[character.type].imagesWalkingWest;
-                character.currentImage = walkingImages[character.currentWalkingImage];
-                character.currentWalkingImage += 1;
-                if (character.currentWalkingImage >= walkingImages.length) {
-                    character.currentWalkingImage = 0;
-                }
-            }
-            else {
-                character.currentImage = character.lastWalkingXDirection === 4
-                    ? _this.imagesLoader.charactersImages[character.type].imagesWalkingEast[0]
-                    : _this.imagesLoader.charactersImages[character.type].imagesWalkingWest[0];
-            }
-        };
-        this.handlePlayerInWorld = function () {
-            var characterPositionCol = Math.floor(_this.player.positionX / envConstants_1.EnvConstants.WORLD_TILE_WIDTH);
-            var characterPositionRow = Math.floor(_this.player.positionY / envConstants_1.EnvConstants.WORLD_TILE_HEIGHT);
-            if (characterPositionCol >= 0 && characterPositionCol < envConstants_1.EnvConstants.WORLD_COLS && characterPositionRow >= 0 && characterPositionRow < envConstants_1.EnvConstants.WORLD_ROWS) {
-                var tileTypeHitted = _this.tileTypeAtColRow(characterPositionRow, characterPositionCol);
-                switch (tileTypeHitted) {
-                    case 2:
-                        break;
-                    case 1:
-                        _this.player.stopAgainstSurface();
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
-        this.setupEventHooks = function () {
+        this.arrangeAudienceInput = function () {
             _this.canvasContext.canvas.addEventListener('mousedown', _this.manageMouseDown);
             document.addEventListener('keydown', _this.manageKeyPressed);
             document.addEventListener('keyup', _this.manageKeyReleased);
         };
         this.manageMouseDown = function (event) { };
         this.manageKeyPressed = function (event) {
-            _this.signalCharactersToReactToKeyStroke(event, true);
+            _this.director.signalCharactersToReactToKeyStroke(event, true);
             event.preventDefault();
         };
         this.manageKeyReleased = function (event) {
-            _this.signalCharactersToReactToKeyStroke(event, false);
+            _this.director.signalCharactersToReactToKeyStroke(event, false);
             event.preventDefault();
         };
-        this.signalCharactersToReactToKeyStroke = function (event, keyPressed) {
-            _this.player.reactToKeyStroke(event.keyCode, keyPressed);
-        };
-        this.tileTypeAtColRow = function (row, col) {
-            if (col >= 0 && col < envConstants_1.EnvConstants.WORLD_COLS && row >= 0 && row < envConstants_1.EnvConstants.WORLD_ROWS) {
-                return _this.worldGrid[row][col];
-            }
-            else {
-                return 1;
-            }
-        };
-        this.calculateMousePosition = function (event) {
-            var rect = _this.canvasContext.canvas.getBoundingClientRect();
+        this.calculateMousePosition = function (canvasContext, event) {
+            var rect = canvasContext.canvas.getBoundingClientRect();
             var root = document.documentElement;
             _this.mousePosInWorldX = event.clientX - rect.left - root.scrollLeft;
             _this.mousePosInWorldY = event.clientY - rect.top - root.scrollTop;
@@ -534,14 +588,10 @@ var WorldBuilder = (function () {
             };
         };
         this.canvasContext = canvasContext;
-        this.playerType = playerType;
-        this.playerName = playerName;
-        this.setupEventHooks();
-        this.imagesLoader = new imagesLoader_1.ImagesLoader();
-        this.scenographer = new scenographer_1.Scenographer(this.imagesLoader, this.canvasContext);
+        this.director = director;
     }
-    return WorldBuilder;
+    return Usher;
 }());
-exports.WorldBuilder = WorldBuilder;
+exports.Usher = Usher;
 
-},{"../actors/playerBase":3,"../constants/envConstants":5,"./imagesLoader":10,"./scenographer":11}]},{},[4]);
+},{}]},{},[4]);

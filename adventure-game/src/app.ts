@@ -1,20 +1,20 @@
 import { EnvConstants } from './constants/envConstants';
-import { WorldBuilder } from './workers/worldBuilder';
+import { Producer } from './workers/producer';
 import { Scenarios } from './constants/scenarios';
 import { CharacterType } from './enums/characterType';
 
 export module App {
     let canvas: HTMLCanvasElement;
     let canvasContext: CanvasRenderingContext2D;
-    let worldBuilderInstance: WorldBuilder;
+    let producer: Producer;
 
     window.onload = function () : void {
         console.log('setting up game...');
         canvas = <HTMLCanvasElement> document.getElementById('gameCanvas');
         canvasContext = canvas.getContext('2d');
         
-        worldBuilderInstance = new WorldBuilder(canvasContext, CharacterType.Princess, 'SchonePrinzessin');
-        worldBuilderInstance.buildWorld(Scenarios.SCENARIO_ONE);
+        producer = new Producer(canvasContext, CharacterType.Warrior, 'TheWarrior');
+        producer.buildSet(Scenarios.SCENARIO_ONE);
     }
 
     export function startGame() {
@@ -23,6 +23,6 @@ export module App {
     }
 
     function updateEnvironment() : void {
-        worldBuilderInstance.changeWorld();
+        producer.changeSet();
     }
 }

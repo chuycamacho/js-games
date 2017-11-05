@@ -8,11 +8,4 @@ export module EnvConstants {
     export const WORLD_GAP = 2;
     export const WORLD_COLS = 20;
     export const WORLD_ROWS = 15;
-
-    export const WORLD_GROUND = 0;
-    export const WORLD_WALL = 1;
-    export const WORLD_GOAL = 2;
-    export const WORLD_DOOR = 3;
-    export const WORLD_KEY = 4;
-    export const WORLD_PLAYER = 5;
 }
