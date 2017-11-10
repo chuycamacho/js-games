@@ -43,7 +43,6 @@ var Producer = (function () {
                         _this.scenario[row][col] = 0;
                         _this.player.positionX = col * envConstants_1.EnvConstants.WORLD_TILE_WIDTH + (envConstants_1.EnvConstants.WORLD_TILE_WIDTH / 2);
                         _this.player.positionY = row * envConstants_1.EnvConstants.WORLD_TILE_HEIGHT + (envConstants_1.EnvConstants.WORLD_TILE_HEIGHT / 2);
-                        return;
                     }
                 }
             }
