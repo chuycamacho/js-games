@@ -23,8 +23,8 @@ var Producer = (function () {
             _this.usher = new usher_1.Usher(_this.canvasContext, _this.director);
             console.log('loading images...');
             _this.backstageLoader.loadInitialImages();
-            console.log('setting audience input...');
-            _this.usher.arrangeAudienceInput();
+            console.log('setting participant input...');
+            _this.usher.arrangeParticipantInput();
         };
         this.changeSet = function () {
             _this.director.continuePlay();
@@ -39,7 +39,7 @@ var Producer = (function () {
             for (var row = 0; row < envConstants_1.EnvConstants.WORLD_ROWS; row++) {
                 for (var col = 0; col < envConstants_1.EnvConstants.WORLD_COLS; col++) {
                     if (_this.scenario[row][col] == 5) {
-                        _this.player = new playerBase_1.PlayerBase(_this.playerType, _this.playerName, true);
+                        _this.player = new playerBase_1.PlayerBase(_this.playerType, _this.playerName);
                         _this.scenario[row][col] = 0;
                         _this.player.positionX = col * envConstants_1.EnvConstants.WORLD_TILE_WIDTH + (envConstants_1.EnvConstants.WORLD_TILE_WIDTH / 2);
                         _this.player.positionY = row * envConstants_1.EnvConstants.WORLD_TILE_HEIGHT + (envConstants_1.EnvConstants.WORLD_TILE_HEIGHT / 2);

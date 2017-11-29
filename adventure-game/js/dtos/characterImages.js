@@ -5,6 +5,8 @@ var CharacterImages = (function () {
         this.imageDefault = undefined;
         this.imagesWalkingEast = [];
         this.imagesWalkingWest = [];
+        this.imagesAttackingEast = [];
+        this.imagesAttackingWest = [];
     }
     return CharacterImages;
 }());

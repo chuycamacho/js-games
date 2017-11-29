@@ -37,16 +37,20 @@ export class Scenographer {
     }
 
     private setCharacterImage = (character: Character): void => {
-        if (character.isWalking) {
-            let walkingImages = character.lastWalkingXDirection == Direction.East
+        if (character.isAttacking) {
+            let images = character.lastWalkingXDirection == Direction.East
+            ? this.backstageLoader.charactersImages[character.type].imagesAttackingEast
+            : this.backstageLoader.charactersImages[character.type].imagesAttackingWest;
+
+            character.currentImage = images[character.currentAttackingImageIndex];
+            character.moveAttackingImageIndex(images.length);
+        } else if (character.isWalking) {
+            let images = character.lastWalkingXDirection == Direction.East
                 ? this.backstageLoader.charactersImages[character.type].imagesWalkingEast
                 : this.backstageLoader.charactersImages[character.type].imagesWalkingWest;
 
-            character.currentImage = walkingImages[character.currentWalkingImage];
-            character.currentWalkingImage += 1;
-            if (character.currentWalkingImage >= walkingImages.length) {
-                character.currentWalkingImage = 0;
-            }
+            character.currentImage = images[character.currentWalkingImageIndex];
+            character.moveWalkingImageIndex(images.length);
         } else {
             character.currentImage = character.lastWalkingXDirection === Direction.East
                 ? this.backstageLoader.charactersImages[character.type].imagesWalkingEast[0]

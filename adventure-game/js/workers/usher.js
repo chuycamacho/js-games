@@ -3,12 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Usher = (function () {
     function Usher(canvasContext, director) {
         var _this = this;
-        this.arrangeAudienceInput = function () {
+        this.arrangeParticipantInput = function () {
             _this.canvasContext.canvas.addEventListener('mousedown', _this.manageMouseDown);
             document.addEventListener('keydown', _this.manageKeyPressed);
             document.addEventListener('keyup', _this.manageKeyReleased);
         };
-        this.manageMouseDown = function (event) { };
         this.manageKeyPressed = function (event) {
             _this.director.signalCharactersToReactToKeyStroke(event, true);
             event.preventDefault();
@@ -27,6 +26,7 @@ var Usher = (function () {
                 y: _this.mousePosInWorldY
             };
         };
+        this.manageMouseDown = function (event) { };
         this.canvasContext = canvasContext;
         this.director = director;
     }

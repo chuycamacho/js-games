@@ -48,8 +48,8 @@ export class Producer {
         console.log('loading images...');
         this.backstageLoader.loadInitialImages();
 
-        console.log('setting audience input...');
-        this.usher.arrangeAudienceInput();
+        console.log('setting participant input...');
+        this.usher.arrangeParticipantInput();
     }
 
     public changeSet = (): void => {
@@ -67,7 +67,7 @@ export class Producer {
         for (let row = 0; row < EnvConstants.WORLD_ROWS; row++) {
             for (let col = 0; col < EnvConstants.WORLD_COLS; col++) {
                 if (this.scenario[row][col] == ScenarioTileType.Player) {
-                    this.player = new PlayerBase(this.playerType, this.playerName, true);
+                    this.player = new PlayerBase(this.playerType, this.playerName);
 
                     this.scenario[row][col] = ScenarioTileType.Ground;
                     this.player.positionX = col * EnvConstants.WORLD_TILE_WIDTH + (EnvConstants.WORLD_TILE_WIDTH / 2);

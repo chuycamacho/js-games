@@ -11,31 +11,30 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var characterBase_1 = require("./characterBase");
-var characterControl_1 = require("./characterControl");
+var playerControl_1 = require("./playerControl");
 var PlayerBase = (function (_super) {
     __extends(PlayerBase, _super);
-    function PlayerBase(type, name, mainPlayer) {
+    function PlayerBase(type, name) {
         var _this = _super.call(this, name, type) || this;
         _this.move = function () {
             _this.isWalking = false;
             if (_this.keyHeldNorth) {
                 _this.lastWalkingYDirection = 1;
                 _this.positionY -= _this.speed;
-                _this.isWalking = true;
             }
             else if (_this.keyHeldSouth) {
                 _this.lastWalkingYDirection = 2;
                 _this.positionY += _this.speed;
-                _this.isWalking = true;
             }
             if (_this.keyHeldWest) {
                 _this.lastWalkingXDirection = 3;
                 _this.positionX -= _this.speed;
-                _this.isWalking = true;
             }
             else if (_this.keyHeldEast) {
                 _this.lastWalkingXDirection = 4;
                 _this.positionX += _this.speed;
+            }
+            if (_this.keyHeldNorth || _this.keyHeldSouth || _this.keyHeldWest || _this.keyHeldEast) {
                 _this.isWalking = true;
             }
         };
@@ -55,20 +54,38 @@ var PlayerBase = (function (_super) {
             _this.isWalking = false;
         };
         _this.reactToKeyStroke = function (keyCode, keyPressed) {
-            if (keyCode == _this.control.controlKeyLeft) {
-                _this.keyHeldWest = keyPressed;
+            if (!_this.control.isValidInput(keyCode)) {
+                return;
             }
-            else if (keyCode == _this.control.controlKeyRight) {
-                _this.keyHeldEast = keyPressed;
+            if (keyCode === _this.control.controlKeyAttack) {
+                _this.setAttackingMode(keyPressed);
             }
-            else if (keyCode == _this.control.controlKeyUp) {
-                _this.keyHeldNorth = keyPressed;
-            }
-            else if (keyCode == _this.control.controlKeyDown) {
-                _this.keyHeldSouth = keyPressed;
+            else {
+                if (keyCode === _this.control.controlKeyLeft) {
+                    _this.keyHeldWest = keyPressed;
+                }
+                else if (keyCode === _this.control.controlKeyRight) {
+                    _this.keyHeldEast = keyPressed;
+                }
+                if (keyCode === _this.control.controlKeyUp) {
+                    _this.keyHeldNorth = keyPressed;
+                }
+                else if (keyCode === _this.control.controlKeyDown) {
+                    _this.keyHeldSouth = keyPressed;
+                }
             }
         };
-        _this.control = new characterControl_1.CharacterControl(mainPlayer);
+        _this.setAttackingMode = function (keyPressed) {
+            if (keyPressed === false) {
+                return;
+            }
+            if (_this.isWalking) {
+                _this.currentAttackingImageIndex = 0;
+            }
+            _this.isAttacking = true;
+            _this.isWalking = false;
+        };
+        _this.control = new playerControl_1.PlayerControl();
         return _this;
     }
     return PlayerBase;

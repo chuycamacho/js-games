@@ -14,10 +14,14 @@ export interface Character {
     speed: number;
 
     isWalking: boolean;
-    currentWalkingImage: number;
+    isAttacking: boolean;
+    currentWalkingImageIndex: number;
+    currentAttackingImageIndex: number;
     lastWalkingXDirection: Direction;
     lastWalkingYDirection: Direction;
 
     move(): void;
     stopAgainstSurface(): void;
+    moveWalkingImageIndex(maxImagesNumber: number): void;
+    moveAttackingImageIndex(maxImagesNumber: number): void;
 }

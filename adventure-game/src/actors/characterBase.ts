@@ -15,7 +15,9 @@ export class CharacterBase implements Character {
     speed: number;
 
     isWalking: boolean;
-    currentWalkingImage: number = 0;
+    isAttacking: boolean;
+    currentWalkingImageIndex: number = 0;
+    currentAttackingImageIndex: number = 0;
     lastWalkingXDirection: Direction;
     lastWalkingYDirection: Direction;
 
@@ -25,8 +27,24 @@ export class CharacterBase implements Character {
         this.type = type;
         this.speed = EnvConstants.DEFAULT_CHARACTER_SPEED;
         this.isWalking = false;
+        this.isAttacking = false;
         this.lastWalkingXDirection = Direction.East;
         this.lastWalkingYDirection = Direction.North;
+    }
+
+    public moveWalkingImageIndex = (maxImagesNumber: number): void => {
+        this.currentWalkingImageIndex++;
+        if (this.currentWalkingImageIndex >= maxImagesNumber) {
+            this.currentWalkingImageIndex = 0;
+        }
+    }
+
+    public moveAttackingImageIndex = (maxImagesNumber: number): void => {
+        this.currentAttackingImageIndex++;
+        if (this.currentAttackingImageIndex >= maxImagesNumber) {
+            this.currentAttackingImageIndex = 0;
+            this.isAttacking = false;
+        }
     }
 
     public move = (): void => {};

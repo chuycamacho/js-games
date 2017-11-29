@@ -29,12 +29,25 @@ export class BackstageLoader {
 
                 this.createImageElement(chImgs.imageDefault, ImageNames.characterInitialImageName(key));
 
-                for (let imgIndex = 0; imgIndex < ImageNames.characterWalkingEastImageNames(key).length; imgIndex++) {
-                    this.createImageElementForArray(chImgs.imagesWalkingEast, imgIndex, ImageNames.characterWalkingEastImageNames(key)[imgIndex]);
+                let imagesWalkingEastNames = ImageNames.characterWalkingEastImageNames(key);
+                let imagesWalkingWestNames = ImageNames.characterWalkingWestImageNames(key);
+                let imagesAttackingEastNames = ImageNames.characterAttackingEastImageNames(key);
+                let imagesAttackingWestNames = ImageNames.characterAttackingWestImageNames(key);
+
+                for (let imgIndex = 0; imgIndex < imagesWalkingEastNames.length; imgIndex++) {
+                    this.createImageElementForArray(chImgs.imagesWalkingEast, imgIndex, imagesWalkingEastNames[imgIndex]);
                 }
 
-                for (let imgIndex = 0; imgIndex < ImageNames.characterWalkingWestImageNames(key).length; imgIndex++) {
-                    this.createImageElementForArray(chImgs.imagesWalkingWest, imgIndex, ImageNames.characterWalkingWestImageNames(key)[imgIndex]);
+                for (let imgIndex = 0; imgIndex < imagesWalkingWestNames.length; imgIndex++) {
+                    this.createImageElementForArray(chImgs.imagesWalkingWest, imgIndex, imagesWalkingWestNames[imgIndex]);
+                }
+
+                for (let imgIndex = 0; imgIndex < imagesAttackingEastNames.length; imgIndex++) {
+                    this.createImageElementForArray(chImgs.imagesAttackingEast, imgIndex, imagesAttackingEastNames[imgIndex]);
+                }
+
+                for (let imgIndex = 0; imgIndex < imagesAttackingWestNames.length; imgIndex++) {
+                    this.createImageElementForArray(chImgs.imagesAttackingWest, imgIndex, imagesAttackingWestNames[imgIndex]);
                 }
 
                 this.charactersImages[key] = chImgs;

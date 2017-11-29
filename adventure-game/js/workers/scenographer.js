@@ -5,15 +5,19 @@ var Scenographer = (function () {
     function Scenographer(backstageLoader, canvasContext) {
         var _this = this;
         this.setCharacterImage = function (character) {
-            if (character.isWalking) {
+            if (character.isAttacking) {
+                var attackingImages = character.lastWalkingXDirection == 4
+                    ? _this.backstageLoader.charactersImages[character.type].imagesAttackingEast
+                    : _this.backstageLoader.charactersImages[character.type].imagesAttackingWest;
+                character.currentImage = attackingImages[character.currentAttackingImageIndex];
+                character.moveAttackingImageIndex(attackingImages.length);
+            }
+            else if (character.isWalking) {
                 var walkingImages = character.lastWalkingXDirection == 4
                     ? _this.backstageLoader.charactersImages[character.type].imagesWalkingEast
                     : _this.backstageLoader.charactersImages[character.type].imagesWalkingWest;
-                character.currentImage = walkingImages[character.currentWalkingImage];
-                character.currentWalkingImage += 1;
-                if (character.currentWalkingImage >= walkingImages.length) {
-                    character.currentWalkingImage = 0;
-                }
+                character.currentImage = walkingImages[character.currentWalkingImageIndex];
+                character.moveWalkingImageIndex(walkingImages.length);
             }
             else {
                 character.currentImage = character.lastWalkingXDirection === 4

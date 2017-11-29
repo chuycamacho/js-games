@@ -3,7 +3,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var envConstants_1 = require("../constants/envConstants");
 var CharacterBase = (function () {
     function CharacterBase(name, type) {
-        this.currentWalkingImage = 0;
+        var _this = this;
+        this.currentWalkingImageIndex = 0;
+        this.currentAttackingImageIndex = 0;
+        this.moveWalkingImageIndex = function (maxImagesNumber) {
+            _this.currentWalkingImageIndex++;
+            if (_this.currentWalkingImageIndex >= maxImagesNumber) {
+                _this.currentWalkingImageIndex = 0;
+            }
+        };
+        this.moveAttackingImageIndex = function (maxImagesNumber) {
+            _this.currentAttackingImageIndex++;
+            if (_this.currentAttackingImageIndex >= maxImagesNumber) {
+                _this.currentAttackingImageIndex = 0;
+                _this.isAttacking = false;
+            }
+        };
         this.move = function () { };
         this.stopAgainstSurface = function () { };
         this.id = "";
@@ -11,6 +26,7 @@ var CharacterBase = (function () {
         this.type = type;
         this.speed = envConstants_1.EnvConstants.DEFAULT_CHARACTER_SPEED;
         this.isWalking = false;
+        this.isAttacking = false;
         this.lastWalkingXDirection = 4;
         this.lastWalkingYDirection = 1;
     }

@@ -1,13 +1,13 @@
 import { Character } from './character';
-import { CharacterControl } from './characterControl'
+import { PlayerControl } from './playerControl'
 
 export interface Player extends Character{
     keyHeldNorth: boolean;
     keyHeldSouth: boolean;
     keyHeldWest: boolean;
-    keyHeldEast: boolean;
+    keyHeldEast: boolean;    
 
-    control: CharacterControl;
+    control: PlayerControl;
 
     reactToKeyStroke(keyCode: number, keyPressed: boolean): void;    
 }

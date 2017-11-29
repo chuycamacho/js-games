@@ -22,11 +22,21 @@ var BackstageLoader = (function () {
                 if (!isNaN(key)) {
                     var chImgs = new characterImages_1.CharacterImages();
                     _this.createImageElement(chImgs.imageDefault, imageNames_1.ImageNames.characterInitialImageName(key));
-                    for (var imgIndex = 0; imgIndex < imageNames_1.ImageNames.characterWalkingEastImageNames(key).length; imgIndex++) {
-                        _this.createImageElementForArray(chImgs.imagesWalkingEast, imgIndex, imageNames_1.ImageNames.characterWalkingEastImageNames(key)[imgIndex]);
+                    var imagesWalkingEastNames = imageNames_1.ImageNames.characterWalkingEastImageNames(key);
+                    var imagesWalkingWestNames = imageNames_1.ImageNames.characterWalkingWestImageNames(key);
+                    var imagesAttackingEastNames = imageNames_1.ImageNames.characterAttackingEastImageNames(key);
+                    var imagesAttackingWestNames = imageNames_1.ImageNames.characterAttackingWestImageNames(key);
+                    for (var imgIndex = 0; imgIndex < imagesWalkingEastNames.length; imgIndex++) {
+                        _this.createImageElementForArray(chImgs.imagesWalkingEast, imgIndex, imagesWalkingEastNames[imgIndex]);
                     }
-                    for (var imgIndex = 0; imgIndex < imageNames_1.ImageNames.characterWalkingWestImageNames(key).length; imgIndex++) {
-                        _this.createImageElementForArray(chImgs.imagesWalkingWest, imgIndex, imageNames_1.ImageNames.characterWalkingWestImageNames(key)[imgIndex]);
+                    for (var imgIndex = 0; imgIndex < imagesWalkingWestNames.length; imgIndex++) {
+                        _this.createImageElementForArray(chImgs.imagesWalkingWest, imgIndex, imagesWalkingWestNames[imgIndex]);
+                    }
+                    for (var imgIndex = 0; imgIndex < imagesAttackingEastNames.length; imgIndex++) {
+                        _this.createImageElementForArray(chImgs.imagesAttackingEast, imgIndex, imagesAttackingEastNames[imgIndex]);
+                    }
+                    for (var imgIndex = 0; imgIndex < imagesAttackingWestNames.length; imgIndex++) {
+                        _this.createImageElementForArray(chImgs.imagesAttackingWest, imgIndex, imagesAttackingWestNames[imgIndex]);
                     }
                     _this.charactersImages[key] = chImgs;
                 }

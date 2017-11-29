@@ -13,13 +13,11 @@ export class Usher {
         this.director = director;
     }
 
-    public arrangeAudienceInput = (): void => {
+    public arrangeParticipantInput = (): void => {
         this.canvasContext.canvas.addEventListener('mousedown', this.manageMouseDown);
         document.addEventListener('keydown', this.manageKeyPressed);
         document.addEventListener('keyup', this.manageKeyReleased);
     }
-
-    private manageMouseDown = (event: any): void => { }
 
     private manageKeyPressed = (event: any): void => {
         this.director.signalCharactersToReactToKeyStroke(event, true);
@@ -42,4 +40,6 @@ export class Usher {
             y: this.mousePosInWorldY
         };
     }
+
+    private manageMouseDown = (event: any): void => { }
 }
