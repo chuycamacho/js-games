@@ -1,5 +1,6 @@
 import { CharacterType } from '../enums/characterType';
 import { Direction } from '../enums/direction';
+import { Point } from '../dtos/point';
 
 export interface Character {
     
@@ -9,8 +10,7 @@ export interface Character {
     readonly name: string;
     readonly type: CharacterType;
 
-    positionX: number;
-    positionY: number;
+    position: Point;
     speed: number;
 
     isWalking: boolean;

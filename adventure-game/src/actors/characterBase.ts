@@ -2,6 +2,7 @@ import { Character } from './character';
 import { CharacterType } from '../enums/characterType';
 import { Direction } from '../enums/direction';
 import { EnvConstants } from '../constants/envConstants';
+import { Point } from '../dtos/point';
 
 export class CharacterBase implements Character {
     readonly id: string;
@@ -10,8 +11,7 @@ export class CharacterBase implements Character {
     
     currentImage: HTMLImageElement;
 
-    positionX: number;
-    positionY: number;
+    position: Point;
     speed: number;
 
     isWalking: boolean;
@@ -21,11 +21,13 @@ export class CharacterBase implements Character {
     lastWalkingXDirection: Direction;
     lastWalkingYDirection: Direction;
 
-    constructor(name: string, type: CharacterType) {
+    constructor(name: string, type: CharacterType, initialPositionX: number, initialPositionY: number, initialSpeed: number) {
         this.id = "";
         this.name = name;
         this.type = type;
-        this.speed = EnvConstants.DEFAULT_CHARACTER_SPEED;
+        this.position = new Point(initialPositionX, initialPositionY);
+        
+        this.speed = initialSpeed;
         this.isWalking = false;
         this.isAttacking = false;
         this.lastWalkingXDirection = Direction.East;

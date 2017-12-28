@@ -6,18 +6,18 @@ var Scenographer = (function () {
         var _this = this;
         this.setCharacterImage = function (character) {
             if (character.isAttacking) {
-                var attackingImages = character.lastWalkingXDirection == 4
+                var images = character.lastWalkingXDirection == 4
                     ? _this.backstageLoader.charactersImages[character.type].imagesAttackingEast
                     : _this.backstageLoader.charactersImages[character.type].imagesAttackingWest;
-                character.currentImage = attackingImages[character.currentAttackingImageIndex];
-                character.moveAttackingImageIndex(attackingImages.length);
+                character.currentImage = images[character.currentAttackingImageIndex];
+                character.moveAttackingImageIndex(images.length);
             }
             else if (character.isWalking) {
-                var walkingImages = character.lastWalkingXDirection == 4
+                var images = character.lastWalkingXDirection == 4
                     ? _this.backstageLoader.charactersImages[character.type].imagesWalkingEast
                     : _this.backstageLoader.charactersImages[character.type].imagesWalkingWest;
-                character.currentImage = walkingImages[character.currentWalkingImageIndex];
-                character.moveWalkingImageIndex(walkingImages.length);
+                character.currentImage = images[character.currentWalkingImageIndex];
+                character.moveWalkingImageIndex(images.length);
             }
             else {
                 character.currentImage = character.lastWalkingXDirection === 4
@@ -26,12 +26,12 @@ var Scenographer = (function () {
             }
         };
         this.putCharactersOnScenario = function (player, npcs, enemies) {
-            _this.drawImageCenteredWithRotation(player.currentImage, player.positionX, player.positionY, envConstants_1.EnvConstants.IMAGE_DEFAULT_ANG);
+            _this.drawImageCenteredWithRotation(player.currentImage, player.position.x, player.position.y, envConstants_1.EnvConstants.IMAGE_DEFAULT_ANG);
             npcs.forEach(function (npc) {
-                return _this.drawImageCenteredWithRotation(npc.currentImage, npc.positionX, npc.positionY, envConstants_1.EnvConstants.IMAGE_DEFAULT_ANG);
+                return _this.drawImageCenteredWithRotation(npc.currentImage, npc.position.x, npc.position.y, envConstants_1.EnvConstants.IMAGE_DEFAULT_ANG);
             });
             enemies.forEach(function (enemy) {
-                return _this.drawImageCenteredWithRotation(enemy.currentImage, enemy.positionX, enemy.positionY, envConstants_1.EnvConstants.IMAGE_DEFAULT_ANG);
+                return _this.drawImageCenteredWithRotation(enemy.currentImage, enemy.position.x, enemy.position.y, envConstants_1.EnvConstants.IMAGE_DEFAULT_ANG);
             });
         };
         this.tileHasTransparency = function (tileType) {
@@ -70,6 +70,7 @@ var Scenographer = (function () {
         this.canvasContext = canvasContext;
     }
     Scenographer.prototype.buildScenario = function (scenario, player, npcs, enemies) {
+        var _this = this;
         var tilePosX = 0;
         var tilePosY = 0;
         for (var row = 0; row < envConstants_1.EnvConstants.WORLD_ROWS; row++) {
@@ -88,6 +89,8 @@ var Scenographer = (function () {
             tilePosY += envConstants_1.EnvConstants.WORLD_TILE_HEIGHT;
         }
         this.setCharacterImage(player);
+        enemies.forEach(function (e) { return _this.setCharacterImage(e); });
+        npcs.forEach(function (n) { return _this.setCharacterImage(n); });
         this.putCharactersOnScenario(player, npcs, enemies);
     };
     return Scenographer;

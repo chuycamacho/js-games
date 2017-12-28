@@ -5,5 +5,5 @@ export const enum ScenarioTileType {
     Door = 3,
     Key = 4,
     Player = 5,
-    Enemy = 6
+    EnemyBarbarian = 6
 }

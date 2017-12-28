@@ -8,6 +8,6 @@ var ScenarioTileType;
     ScenarioTileType[ScenarioTileType["Door"] = 3] = "Door";
     ScenarioTileType[ScenarioTileType["Key"] = 4] = "Key";
     ScenarioTileType[ScenarioTileType["Player"] = 5] = "Player";
-    ScenarioTileType[ScenarioTileType["Enemy"] = 6] = "Enemy";
+    ScenarioTileType[ScenarioTileType["EnemyBarbarian"] = 6] = "EnemyBarbarian";
 })(ScenarioTileType = exports.ScenarioTileType || (exports.ScenarioTileType = {}));
 //# sourceMappingURL=scenarioTileType.js.map

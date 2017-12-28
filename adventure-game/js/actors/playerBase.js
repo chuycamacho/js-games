@@ -12,27 +12,28 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var characterBase_1 = require("./characterBase");
 var playerControl_1 = require("./playerControl");
+var envConstants_1 = require("../constants/envConstants");
 var PlayerBase = (function (_super) {
     __extends(PlayerBase, _super);
-    function PlayerBase(type, name) {
-        var _this = _super.call(this, name, type) || this;
+    function PlayerBase(type, name, initialPositionX, initialPositionY) {
+        var _this = _super.call(this, name, type, initialPositionX, initialPositionY, envConstants_1.EnvConstants.DEFAULT_PLAYER_SPEED) || this;
         _this.move = function () {
             _this.isWalking = false;
             if (_this.keyHeldNorth) {
                 _this.lastWalkingYDirection = 1;
-                _this.positionY -= _this.speed;
+                _this.position.y -= _this.speed;
             }
             else if (_this.keyHeldSouth) {
                 _this.lastWalkingYDirection = 2;
-                _this.positionY += _this.speed;
+                _this.position.y += _this.speed;
             }
             if (_this.keyHeldWest) {
                 _this.lastWalkingXDirection = 3;
-                _this.positionX -= _this.speed;
+                _this.position.x -= _this.speed;
             }
             else if (_this.keyHeldEast) {
                 _this.lastWalkingXDirection = 4;
-                _this.positionX += _this.speed;
+                _this.position.x += _this.speed;
             }
             if (_this.keyHeldNorth || _this.keyHeldSouth || _this.keyHeldWest || _this.keyHeldEast) {
                 _this.isWalking = true;
@@ -40,16 +41,16 @@ var PlayerBase = (function (_super) {
         };
         _this.stopAgainstSurface = function () {
             if (_this.keyHeldNorth && _this.lastWalkingYDirection == 1) {
-                _this.positionY += _this.speed;
+                _this.position.y += _this.speed;
             }
             else if (_this.keyHeldSouth && _this.lastWalkingYDirection == 2) {
-                _this.positionY -= _this.speed;
+                _this.position.y -= _this.speed;
             }
             if (_this.keyHeldEast && _this.lastWalkingXDirection == 4) {
-                _this.positionX -= _this.speed;
+                _this.position.x -= _this.speed;
             }
             else if (_this.keyHeldWest && _this.lastWalkingXDirection == 3) {
-                _this.positionX += _this.speed;
+                _this.position.x += _this.speed;
             }
             _this.isWalking = false;
         };

@@ -3,6 +3,8 @@ import { CharacterBase } from './characterBase';
 import { PlayerControl } from './playerControl';
 import { CharacterType } from '../enums/characterType';
 import { Direction } from '../enums/direction';
+import { Point } from '../dtos/point';
+import { EnvConstants } from '../constants/envConstants';
 
 export class PlayerBase extends CharacterBase implements Player {
 
@@ -13,8 +15,8 @@ export class PlayerBase extends CharacterBase implements Player {
 
     control: PlayerControl;
 
-    constructor(type: CharacterType, name: string) {
-        super(name, type);
+    constructor(type: CharacterType, name: string, initialPositionX: number, initialPositionY: number) {
+        super(name, type, initialPositionX, initialPositionY, EnvConstants.DEFAULT_PLAYER_SPEED);
         this.control = new PlayerControl();
     }
 
@@ -22,18 +24,18 @@ export class PlayerBase extends CharacterBase implements Player {
         this.isWalking = false;
         if (this.keyHeldNorth) {
             this.lastWalkingYDirection = Direction.North;
-            this.positionY -= this.speed;
+            this.position.y -= this.speed;
         } else if (this.keyHeldSouth) {
             this.lastWalkingYDirection = Direction.South;
-            this.positionY += this.speed;
+            this.position.y += this.speed;
         }
 
         if (this.keyHeldWest) {
             this.lastWalkingXDirection = Direction.West;
-            this.positionX -= this.speed;
+            this.position.x -= this.speed;
         } else if (this.keyHeldEast) {
             this.lastWalkingXDirection = Direction.East;
-            this.positionX += this.speed;
+            this.position.x += this.speed;
         }
         if (this.keyHeldNorth || this.keyHeldSouth || this.keyHeldWest || this.keyHeldEast) {
             this.isWalking = true;
@@ -42,15 +44,15 @@ export class PlayerBase extends CharacterBase implements Player {
 
     public stopAgainstSurface = (): void => {
         if (this.keyHeldNorth && this.lastWalkingYDirection == Direction.North) {
-            this.positionY += this.speed;
+            this.position.y += this.speed;
         } else if (this.keyHeldSouth && this.lastWalkingYDirection == Direction.South) {
-            this.positionY -= this.speed;
+            this.position.y -= this.speed;
         }
 
         if (this.keyHeldEast && this.lastWalkingXDirection == Direction.East) {
-            this.positionX -= this.speed;
+            this.position.x -= this.speed;
         } else if (this.keyHeldWest && this.lastWalkingXDirection == Direction.West) {
-            this.positionX += this.speed;
+            this.position.x += this.speed;
         }
         this.isWalking = false;
     }

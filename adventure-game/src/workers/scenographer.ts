@@ -33,6 +33,8 @@ export class Scenographer {
             tilePosY += EnvConstants.WORLD_TILE_HEIGHT;
         }
         this.setCharacterImage(player);
+        enemies.forEach(e => this.setCharacterImage(e));
+        npcs.forEach(n => this.setCharacterImage(n));
         this.putCharactersOnScenario(player, npcs, enemies);
     }
 
@@ -59,14 +61,14 @@ export class Scenographer {
     }
 
     private putCharactersOnScenario = (player: Character, npcs: Character[], enemies: Character[]): void => {
-        this.drawImageCenteredWithRotation(player.currentImage, player.positionX, player.positionY, EnvConstants.IMAGE_DEFAULT_ANG);
+        this.drawImageCenteredWithRotation(player.currentImage, player.position.x, player.position.y, EnvConstants.IMAGE_DEFAULT_ANG);
 
         npcs.forEach(npc =>
-            this.drawImageCenteredWithRotation(npc.currentImage, npc.positionX, npc.positionY, EnvConstants.IMAGE_DEFAULT_ANG)
+            this.drawImageCenteredWithRotation(npc.currentImage, npc.position.x, npc.position.y, EnvConstants.IMAGE_DEFAULT_ANG)
         );
 
         enemies.forEach(enemy =>
-            this.drawImageCenteredWithRotation(enemy.currentImage, enemy.positionX, enemy.positionY, EnvConstants.IMAGE_DEFAULT_ANG)
+            this.drawImageCenteredWithRotation(enemy.currentImage, enemy.position.x, enemy.position.y, EnvConstants.IMAGE_DEFAULT_ANG)
         );
     }
 
